@@ -4,17 +4,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TerrariaCraftingCalculator"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    d:Width="300"
-    d:Height="300"
+    d:Width="600"
+    d:Height="600"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Name="AppMainPage">
 
     <Grid Padding="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -26,9 +29,9 @@
                 </DataTemplate>
             </AutoSuggestBox.ItemTemplate>
         </AutoSuggestBox>
+        <TextBlock Grid.Row="1" Margin="0,20,0,0" Text="Items to craft:" />
         <ListView
-            Grid.Row="1"
-            Margin="0,20,0,0"
+            Grid.Row="2"
             ItemsSource="{Binding ElementName=AppMainPage, Path=RecipesList}"
             d:ItemsSource="{Binding Source={StaticResource designData}, Path=ItemsToCraft}"
             Background="LightGray">
@@ -53,9 +56,29 @@
                             </Button>
                             <Button Content="+" HorizontalAlignment="Stretch" />
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Ingredients:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <muxc:ItemsRepeater ItemsSource="{Binding Recipe.Ingredients}">
+                                <muxc:ItemsRepeater.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel.Resources>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="FontSize" Value="10" />
+                                                </Style>
+                                            </StackPanel.Resources>
+                                            <TextBlock Text="{Binding Quantity}" />
+                                            <TextBlock Text="x" Margin="0,0,5,0" />
+                                            <TextBlock Text="{Binding Item.Name}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </muxc:ItemsRepeater.ItemTemplate>
+                            </muxc:ItemsRepeater>
+                        </StackPanel>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <TextBlock Grid.Row="3" Margin="0,20,0,0" Text="Total ingredients:" />
     </Grid>
 </Page>

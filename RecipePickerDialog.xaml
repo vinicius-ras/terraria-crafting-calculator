@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TerrariaCraftingCalculator"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mcux="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     PrimaryButtonText="Select"
     SecondaryButtonText="Cancel"
@@ -21,12 +21,17 @@
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </Style>
+                            </StackPanel.Resources>
                             <TextBlock Text="{Binding ResultingItem.Quantity}" />
                             <TextBlock Text="x" Margin="0,0,5,0" />
                             <TextBlock Text="{Binding ResultingItem.Item.Name}" />
                         </StackPanel>
-                        <ListBox ItemsSource="{Binding Ingredients}">
-                            <ListBox.ItemTemplate>
+                        <mcux:ItemsRepeater ItemsSource="{Binding Ingredients}" Margin="10,0,0,0">
+                            <mcux:ItemsRepeater.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="{Binding Quantity}" />
@@ -34,8 +39,8 @@
                                         <TextBlock Text="{Binding Item.Name}" />
                                     </StackPanel>
                                 </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                            </mcux:ItemsRepeater.ItemTemplate>
+                        </mcux:ItemsRepeater>
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
