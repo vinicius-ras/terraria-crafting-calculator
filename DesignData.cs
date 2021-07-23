@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TerrariaCraftingCalculator.Models;
 
 namespace TerrariaCraftingCalculator
@@ -201,6 +202,8 @@ namespace TerrariaCraftingCalculator
                 },
             },
         };
+        /// <summary>Backing field for the <see cref="AvailableRecipes"/> property.</summary>
+        private static readonly IEnumerable<RecipeEntry> _availableRecipes = _itemsToCraft.Select(quantifiedRecipe => quantifiedRecipe.Recipe);
 
 
 
@@ -211,5 +214,7 @@ namespace TerrariaCraftingCalculator
         public static IEnumerable<string> ItemSuggestions => _itemSuggestions;
         /// <summary>A mock list of items to be rendered in the UI design preview.</summary>
         public static IEnumerable<QuantifiedRecipeEntry> ItemsToCraft => _itemsToCraft;
+        /// <summary>A mock list of recipes to be rendered in the UI design preview.</summary>
+        public static IEnumerable<RecipeEntry> AvailableRecipes => _availableRecipes;
     }
 }

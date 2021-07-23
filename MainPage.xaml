@@ -10,9 +10,6 @@
     d:Height="300"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Name="AppMainPage">
-    <Page.Resources>
-        <local:DesignData x:Key="designData" />
-    </Page.Resources>
 
     <Grid Padding="20">
         <Grid.RowDefinitions>

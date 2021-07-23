@@ -211,24 +211,31 @@ namespace TerrariaCraftingCalculator
                 // Find results by matching typed search
                 var matchingRecipes = recipesResults
                         .Where(recipe => recipe.ResultingItem.Item.Name.Equals(selectedItemStr, StringComparison.OrdinalIgnoreCase))
-                        .Select(recipe => new QuantifiedRecipeEntry
-                        {
-                            Quantity = 1,
-                            Recipe = recipe,
-                        })
                         .ToList();
                 int totalMatchingRecipes = matchingRecipes.Count;
+                QuantifiedRecipeEntry chosenRecipe = new QuantifiedRecipeEntry
+                {
+                    Quantity = 1,
+                    Recipe = null,
+                };
                 if (totalMatchingRecipes == 1)
                 {
                     // If there was a single match, add it to the recipes list right away
-                    RecipesList.Add(matchingRecipes.First());
+                    chosenRecipe.Recipe = matchingRecipes.First();
                 }
                 else
                 {
                     // For multiple matches (items with more than one recipe), display a "picker" dialog, so that the user
                     // can choose between one of the available recipes
-                    // TODO: create the dialog and display it here.
+                    var recipePickerDialog = new RecipePickerDialog(matchingRecipes);
+                    var dialogResult = await recipePickerDialog.ShowAsync();
+                    if (dialogResult == ContentDialogResult.Primary)
+                        chosenRecipe.Recipe = recipePickerDialog.SelectedRecipe;
                 }
+
+                // If a recipe has been picked, add it to our list of current recipes
+                if (chosenRecipe.Recipe != null)
+                    RecipesList.Add(chosenRecipe);
             }
         }
     }
