@@ -6,7 +6,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    d:Width="300"
+    d:Height="300"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Name="AppMainPage">
+    <Page.Resources>
+        <local:DesignData x:Key="designData" />
+    </Page.Resources>
 
     <Grid Padding="20">
         <Grid.RowDefinitions>
@@ -16,13 +22,43 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <AutoSuggestBox QueryIcon="Find" TextChanged="AutoSuggestBox_TextChanged" SuggestionChosen="AutoSuggestBox_SuggestionChosen">
+        <AutoSuggestBox PlaceholderText="Search for an item..." QueryIcon="Find" TextChanged="AutoSuggestBox_TextChanged" SuggestionChosen="AutoSuggestBox_SuggestionChosen" d:ItemsSource="{Binding Source={StaticResource designData}, Path=ItemSuggestions}">
             <AutoSuggestBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" />
                 </DataTemplate>
             </AutoSuggestBox.ItemTemplate>
         </AutoSuggestBox>
-        <ListView Grid.Row="1" Margin="0,20,0,0" />
+        <ListView
+            Grid.Row="1"
+            Margin="0,20,0,0"
+            ItemsSource="{Binding ElementName=AppMainPage, Path=RecipesList}"
+            d:ItemsSource="{Binding Source={StaticResource designData}, Path=ItemsToCraft}"
+            Background="LightGray">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="White" Padding="5" Margin="0,0,0,5">
+                        <TextBlock Text="{Binding Path=Recipe.ResultingItem.Item.Name}" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Quantity:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding Path=Quantity}" TextAlignment="Center" Margin="5,0" />
+                            <Button Content="-" HorizontalAlignment="Stretch">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="IsEnabled" Value="True" />
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button Content="+" HorizontalAlignment="Stretch" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

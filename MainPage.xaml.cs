@@ -3,6 +3,7 @@ using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -34,6 +35,13 @@ namespace TerrariaCraftingCalculator
         private CancellationTokenSource _cancellationTokenSource = null;
         /// <summary>The HTTP client used to comunicate with the back end server which contains crafting information about items.</summary>
         private static readonly HttpClient _httpClient = new HttpClient();
+
+
+
+
+
+        // INSTANCE PROPERTIES
+        public ObservableCollection<QuantifiedRecipeEntry> RecipesList { get; set; } = new ObservableCollection<QuantifiedRecipeEntry>();
 
 
 
@@ -169,7 +177,6 @@ namespace TerrariaCraftingCalculator
                             }
                         };
 
-
                     // Get information about the Ingredient(s)
                     var recipeIngredients = new List<QuantifiedItemEntry>();
                     foreach (var ingredientLi in rowIngredientsTd.QuerySelectorAll<IHtmlListItemElement>("li"))
@@ -199,6 +206,28 @@ namespace TerrariaCraftingCalculator
                         CraftingStations = craftingStations.ToArray(),
                         Ingredients = recipeIngredients,
                     });
+                }
+
+                // Find results by matching typed search
+                var matchingRecipes = recipesResults
+                        .Where(recipe => recipe.ResultingItem.Item.Name.Equals(selectedItemStr, StringComparison.OrdinalIgnoreCase))
+                        .Select(recipe => new QuantifiedRecipeEntry
+                        {
+                            Quantity = 1,
+                            Recipe = recipe,
+                        })
+                        .ToList();
+                int totalMatchingRecipes = matchingRecipes.Count;
+                if (totalMatchingRecipes == 1)
+                {
+                    // If there was a single match, add it to the recipes list right away
+                    RecipesList.Add(matchingRecipes.First());
+                }
+                else
+                {
+                    // For multiple matches (items with more than one recipe), display a "picker" dialog, so that the user
+                    // can choose between one of the available recipes
+                    // TODO: create the dialog and display it here.
                 }
             }
         }

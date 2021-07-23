@@ -119,12 +119,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DesignData.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ItemEntry.cs" />
+    <Compile Include="Models\QuantifiedRecipeEntry.cs" />
     <Compile Include="Models\RecipeEntry.cs" />
-    <Compile Include="Models\RecipeItemEntry.cs" />
+    <Compile Include="Models\QuantifiedItemEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

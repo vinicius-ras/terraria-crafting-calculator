@@ -3,7 +3,7 @@
 namespace TerrariaCraftingCalculator.Models
 {
     /// <summary>Represents a recipe to make an item (ingredients, resulting items, and crafting station).</summary>
-    class RecipeEntry
+    public class RecipeEntry
     {
         /// <summary>A description of the item(s) that will be the result of the recipe.</summary>
         public QuantifiedItemEntry ResultingItem { get; set; }
