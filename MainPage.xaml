@@ -58,8 +58,9 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="White" Padding="5" Margin="0,0,0,5" ColumnSpacing="10" RowSpacing="5">
+                    <Grid BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="White" Padding="5" Margin="0,0,0,5" ColumnSpacing="10" RowSpacing="15">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
@@ -72,36 +73,57 @@
 
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Quantity to craft:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
                         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                            <TextBox Grid.Column="1" Text="{Binding Path=Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" TextAlignment="Center" Margin="5,0" TextChanged="RecipeQuantityChanged" />
-                            <Button Content="-" HorizontalAlignment="Stretch">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Setter Property="IsEnabled" Value="True" />
-                                    </Style>
-                                </Button.Style>
+                            <TextBox Grid.Column="1" Text="{Binding Path=Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" TextAlignment="Center" Margin="5,0" TextChanged="RecipeQuantityChanged" VerticalAlignment="Center" />
+                            <Button HorizontalAlignment="Stretch" Click="ButtonDecreaseItemQuantityInCraftingList">
+                                <Button.Content>
+                                    <SymbolIcon Symbol="Remove" />
+                                </Button.Content>
                             </Button>
-                            <Button Content="+" HorizontalAlignment="Stretch" />
+                            <Button HorizontalAlignment="Stretch" Click="ButtonIncreaseItemQuantityInCraftingList">
+                                <Button.Content>
+                                    <SymbolIcon Symbol="Add" />
+                                </Button.Content>
+                            </Button>
+                            <Button HorizontalAlignment="Stretch" Click="ButtonRemoveItemFromCraftingList" Margin="10" Tag="{Binding}">
+                                <Button.Content>
+                                    <SymbolIcon Symbol="Delete" />
+                                </Button.Content>
+                            </Button>
                         </StackPanel>
 
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Ingredients:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
-                            <muxc:ItemsRepeater ItemsSource="{Binding Recipe.Ingredients}">
-                                <muxc:ItemsRepeater.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <StackPanel.Resources>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="FontSize" Value="10" />
-                                                </Style>
-                                            </StackPanel.Resources>
-                                            <TextBlock Text="{Binding Quantity}" />
-                                            <TextBlock Text="x" Margin="0,0,5,0" />
-                                            <TextBlock Text="{Binding Item.Name}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </muxc:ItemsRepeater.ItemTemplate>
-                            </muxc:ItemsRepeater>
-                        </StackPanel>
+                        <muxc:ItemsRepeater Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Recipe.Ingredients}">
+                            <muxc:ItemsRepeater.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="FontSize" Value="10" />
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <TextBlock Text="{Binding Quantity}" />
+                                        <TextBlock Text="x" Margin="0,0,5,0" />
+                                        <TextBlock Text="{Binding Item.Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </muxc:ItemsRepeater.ItemTemplate>
+                        </muxc:ItemsRepeater>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Crafting stations:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                        <muxc:ItemsRepeater Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Recipe.CraftingStations}">
+                            <muxc:ItemsRepeater.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="FontSize" Value="10" />
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <TextBlock Text="{Binding Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </muxc:ItemsRepeater.ItemTemplate>
+                        </muxc:ItemsRepeater>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

@@ -13,9 +13,12 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using TerrariaCraftingCalculator.Extensions;
 using TerrariaCraftingCalculator.Models;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media;
 
 namespace TerrariaCraftingCalculator
 {
@@ -293,5 +296,54 @@ namespace TerrariaCraftingCalculator
         /// <param name="sender">Reference to the <see cref="TextBox"/> where the user picked an entry.</param>
         /// <param name="args">Event information.</param>
         private void RecipeQuantityChanged(object sender, TextChangedEventArgs args) => RefreshTotalIngredientsList();
+
+
+        /// <summary>Called when the "plus" button is clicked in the list of items to craft, in order to increase the crafting amount of an item.</summary>
+        /// <param name="sender">Reference to the <see cref="Button"/> clicked by the user.</param>
+        /// <param name="args">Event information.</param>
+        private void ButtonIncreaseItemQuantityInCraftingList(object sender, RoutedEventArgs e)
+        {
+            // Use the visual tree to find the "quantity" text box related to the item in the list
+            var buttonRef = (Button)sender;
+            var closestStackPanel = VisualTreeHelperUtilities.FindClosestParentOfType<StackPanel>(buttonRef);
+            var quantityTextBox = VisualTreeHelperUtilities.GetAllChildren(closestStackPanel)
+                .OfType<TextBox>()
+                .Single();
+
+            // Increase the quantity
+            if (int.TryParse(quantityTextBox.Text, out int currentQuantity) == false)
+                return;
+            quantityTextBox.Text = (++currentQuantity).ToString();
+        }
+
+
+        /// <summary>Called when the "minus" button is clicked in the list of items to craft, in order to decrease the crafting amount of an item.</summary>
+        /// <param name="sender">Reference to the <see cref="Button"/> clicked by the user.</param>
+        /// <param name="args">Event information.</param>
+        private void ButtonDecreaseItemQuantityInCraftingList(object sender, RoutedEventArgs e)
+        {
+            // Use the visual tree to find the "quantity" text box related to the item in the list
+            var buttonRef = (Button)sender;
+            var closestStackPanel = VisualTreeHelperUtilities.FindClosestParentOfType<StackPanel>(buttonRef);
+            var quantityTextBox = VisualTreeHelperUtilities.GetAllChildren(closestStackPanel)
+                .OfType<TextBox>()
+                .Single();
+
+            // Increase the quantity
+            if (int.TryParse(quantityTextBox.Text, out int currentQuantity) == false)
+                return;
+            quantityTextBox.Text = (--currentQuantity).ToString();
+        }
+
+
+        /// <summary>Called when the "trash" button is clicked in the list of items to craft, in order to remove an item from the crafting list.</summary>
+        /// <param name="sender">Reference to the <see cref="Button"/> clicked by the user.</param>
+        /// <param name="args">Event information.</param>
+        private void ButtonRemoveItemFromCraftingList(object sender, RoutedEventArgs e)
+        {
+            var buttonRef = (Button)sender;
+            var associatedQuantifiedRecipeEntry = (QuantifiedRecipeEntry)buttonRef.Tag;
+            RecipesList.Remove(associatedQuantifiedRecipeEntry);
+        }
     }
 }

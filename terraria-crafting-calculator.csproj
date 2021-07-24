@@ -123,6 +123,7 @@
     <Compile Include="Data\QuantifiedItemEntryObservableCollection.cs" />
     <Compile Include="Data\RecipeEntryObservableCollection.cs" />
     <Compile Include="Data\QuantifiedRecipeEntryObservableCollection.cs" />
+    <Compile Include="Utilities\VisualTreeHelperUtilities.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
