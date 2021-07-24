@@ -17,7 +17,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -42,11 +42,21 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="White" Padding="5" Margin="0,0,0,5">
-                        <TextBlock Text="{Binding Path=Recipe.ResultingItem.Item.Name}" />
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Quantity:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" />
-                            <TextBox Grid.Column="1" Text="{Binding Path=Quantity}" TextAlignment="Center" Margin="5,0" />
+                    <Grid BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="White" Padding="5" Margin="0,0,0,5" ColumnSpacing="10" RowSpacing="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Path=Recipe.ResultingItem.Item.Name}" />
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Quantity to craft:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                            <TextBox Grid.Column="1" Text="{Binding Path=Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" TextAlignment="Center" Margin="5,0" TextChanged="RecipeQuantityChanged" />
                             <Button Content="-" HorizontalAlignment="Stretch">
                                 <Button.Style>
                                     <Style TargetType="Button">
@@ -56,8 +66,9 @@
                             </Button>
                             <Button Content="+" HorizontalAlignment="Stretch" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Ingredients:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" Margin="0,0,5,0" />
+                        
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Ingredients:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
                             <muxc:ItemsRepeater ItemsSource="{Binding Recipe.Ingredients}">
                                 <muxc:ItemsRepeater.ItemTemplate>
                                     <DataTemplate>
@@ -75,10 +86,21 @@
                                 </muxc:ItemsRepeater.ItemTemplate>
                             </muxc:ItemsRepeater>
                         </StackPanel>
-                    </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
         <TextBlock Grid.Row="3" Margin="0,20,0,0" Text="Total ingredients:" />
+        <muxc:ItemsRepeater Grid.Row="4" ItemsSource="{Binding ElementName=AppMainPage, Path=TotalIngredientsList}">
+            <muxc:ItemsRepeater.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Quantity}" />
+                        <TextBlock Text="x" Margin="0,0,5,0" />
+                        <TextBlock Text="{Binding Item.Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </muxc:ItemsRepeater.ItemTemplate>
+        </muxc:ItemsRepeater>
     </Grid>
 </Page>

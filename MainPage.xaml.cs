@@ -41,7 +41,10 @@ namespace TerrariaCraftingCalculator
 
 
         // INSTANCE PROPERTIES
+        /// <summary>Holds the list of recipes added for crafting.</summary>
         public ObservableCollection<QuantifiedRecipeEntry> RecipesList { get; set; } = new ObservableCollection<QuantifiedRecipeEntry>();
+        /// <summary>The calculated list of total ingredients that should be gathered for crafting.</summary>
+        public ObservableCollection<QuantifiedItemEntry> TotalIngredientsList { get; set; } = new ObservableCollection<QuantifiedItemEntry>();
 
 
 
@@ -52,6 +55,7 @@ namespace TerrariaCraftingCalculator
         public MainPage()
         {
             this.InitializeComponent();
+            RecipesList.CollectionChanged += (sender, evtArgs) => RefreshTotalIngredientsList();
         }
 
 
@@ -210,8 +214,8 @@ namespace TerrariaCraftingCalculator
 
                 // Find results by matching typed search
                 var matchingRecipes = recipesResults
-                        .Where(recipe => recipe.ResultingItem.Item.Name.Equals(selectedItemStr, StringComparison.OrdinalIgnoreCase))
-                        .ToList();
+                    .Where(recipe => recipe.ResultingItem.Item.Name.Equals(selectedItemStr, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
                 int totalMatchingRecipes = matchingRecipes.Count;
                 QuantifiedRecipeEntry chosenRecipe = new QuantifiedRecipeEntry
                 {
@@ -237,6 +241,44 @@ namespace TerrariaCraftingCalculator
                 if (chosenRecipe.Recipe != null)
                     RecipesList.Add(chosenRecipe);
             }
+        }
+
+
+        /// <summary>Call this to recalculate and refresh the "total ingredients" list.</summary>
+        /// <remarks>This method will be automatically called when the <see cref="RecipesList"/> observes a change to its contents.</remarks>
+        private void RefreshTotalIngredientsList()
+        {
+            var ingredientTotals = RecipesList.SelectMany(recipe => recipe.Recipe.Ingredients.Select(ingredient => new QuantifiedItemEntry
+                {
+                    Item = ingredient.Item,
+                    Quantity = ingredient.Quantity * recipe.Quantity,
+                }))
+                .GroupBy(ingredient => ingredient.Item.Name)
+                .Select(ingredientGroup => new {
+                    ingredientName = ingredientGroup.Key,
+                    totalRequired = ingredientGroup.Sum(ingredient => ingredient.Quantity),
+                    imageUrl = ingredientGroup.First().Item.ImageUrl,
+                });
+            TotalIngredientsList.Clear();
+            foreach (var ingredientSummary in ingredientTotals)
+                TotalIngredientsList.Add(new QuantifiedItemEntry
+                {
+                    Quantity = ingredientSummary.totalRequired,
+                    Item = new ItemEntry
+                    {
+                        Name = ingredientSummary.ingredientName,
+                        ImageUrl = ingredientSummary.imageUrl,
+                    },
+                });
+        }
+
+
+        /// <summary>Called when the quantity of a recipe changed.</summary>
+        /// <param name="sender">Reference to the <see cref="TextBox"/> where the user picked an entry.</param>
+        /// <param name="args">Event information.</param>
+        private void RecipeQuantityChanged(object sender, TextChangedEventArgs args)
+        {
+            RefreshTotalIngredientsList();
         }
     }
 }
