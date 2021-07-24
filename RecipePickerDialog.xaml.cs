@@ -39,6 +39,7 @@ namespace TerrariaCraftingCalculator
             this.Title = $"Pick a recipe for: {recipesToDisplay.First().ResultingItem.Item.Name}";
             foreach (var recipe in recipesToDisplay)
                 RecipesToDisplay.Add(recipe);
+            _recipesCombo.SelectedIndex = 0;
         }
 
 

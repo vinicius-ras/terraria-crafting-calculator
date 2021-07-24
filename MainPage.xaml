@@ -10,8 +10,13 @@
     d:Height="600"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Name="AppMainPage">
+    <Page.Resources>
+        <Style x:Key="titleTextBlock" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+    </Page.Resources>
 
-    <Grid Padding="20">
+        <Grid Padding="20" ColumnSpacing="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -20,24 +25,35 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <AutoSuggestBox PlaceholderText="Search for an item..." QueryIcon="Find" TextChanged="AutoSuggestBox_TextChanged" SuggestionChosen="AutoSuggestBox_SuggestionChosen" d:ItemsSource="{Binding Source={StaticResource designData}, Path=ItemSuggestions}">
+
+        <TextBlock Text="Search for an item:" VerticalAlignment="Center" Style="{StaticResource titleTextBlock}"/>
+        <AutoSuggestBox x:Name="_searchBar" Grid.Column="1" PlaceholderText="Type an item name..." QueryIcon="Find" TextChanged="AutoSuggestBox_TextChanged" SuggestionChosen="AutoSuggestBox_SuggestionChosen" d:ItemsSource="{Binding Source={StaticResource designData}, Path=ItemSuggestions}" HorizontalAlignment="Stretch">
             <AutoSuggestBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" />
                 </DataTemplate>
             </AutoSuggestBox.ItemTemplate>
+            <FlyoutBase.AttachedFlyout>
+                <Flyout>
+                    <TextBlock x:Name="_searchBarFlyoutText" />
+                </Flyout>
+            </FlyoutBase.AttachedFlyout>
         </AutoSuggestBox>
-        <TextBlock Grid.Row="1" Margin="0,20,0,0" Text="Items to craft:" />
+
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,20,0,0" Text="Items to craft:"  Style="{StaticResource titleTextBlock}" />
         <ListView
             Grid.Row="2"
+            Grid.ColumnSpan="2"
             ItemsSource="{Binding ElementName=AppMainPage, Path=RecipesList}"
             d:ItemsSource="{Binding Source={StaticResource designData}, Path=ItemsToCraft}"
             Background="LightGray">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="0" />
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
@@ -66,7 +82,7 @@
                             </Button>
                             <Button Content="+" HorizontalAlignment="Stretch" />
                         </StackPanel>
-                        
+
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Ingredients:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
                             <muxc:ItemsRepeater ItemsSource="{Binding Recipe.Ingredients}">
@@ -90,8 +106,9 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <TextBlock Grid.Row="3" Margin="0,20,0,0" Text="Total ingredients:" />
-        <muxc:ItemsRepeater Grid.Row="4" ItemsSource="{Binding ElementName=AppMainPage, Path=TotalIngredientsList}">
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Margin="0,20,0,0" Text="Total ingredients:" Style="{StaticResource titleTextBlock}" />
+        <muxc:ItemsRepeater Grid.Row="4" Grid.ColumnSpan="2"
+                            ItemsSource="{Binding ElementName=AppMainPage, Path=TotalIngredientsList}">
             <muxc:ItemsRepeater.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

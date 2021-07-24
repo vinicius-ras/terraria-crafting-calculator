@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Web;
 using TerrariaCraftingCalculator.Models;
 using Windows.UI.Xaml.Controls;
-
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace TerrariaCraftingCalculator
 {
@@ -117,129 +117,145 @@ namespace TerrariaCraftingCalculator
         /// <param name="args">Event information.</param>
         private async void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
-            // Generate a URL and call the API to retrieve crafting data
-            string selectedItemStr = (string)args.SelectedItem,
-                wikiPageName = selectedItemStr.Replace(" ", "_"),
-                wikiPageUrl = $"https://terraria.fandom.com/wiki/{wikiPageName}";
-
-            var response = await _httpClient.GetAsync(wikiPageUrl);
-
-            // Parse HTTP response
-            var quantityParser = new Regex(@"\((\d+)\)");
-            using (var responseStream = await response.Content.ReadAsStreamAsync())
+            try
             {
-                var parser = new HtmlParser();
-                var parsedPage = await parser.ParseDocumentAsync(responseStream);
-                var recipeRows = parsedPage.QuerySelectorAll("div.crafts tr[data-rowid]");
-                var foundRows = recipeRows.Select(r => r.OuterHtml).ToList();
-                IElement lastResultTd = null,
-                    lastIngredientsTd = null,
-                    lastCraftingStationTd = null;
-                var recipesResults = new List<RecipeEntry>();
-                foreach (var row in recipeRows)
+                // Disable control while processing
+                sender.IsEnabled = false;
+
+                // Generate a URL and call the API to retrieve crafting data
+                string selectedItemStr = (string)args.SelectedItem,
+                    wikiPageName = selectedItemStr.Replace(" ", "_"),
+                    wikiPageUrl = $"https://terraria.fandom.com/wiki/{wikiPageName}";
+
+                var response = await _httpClient.GetAsync(wikiPageUrl);
+
+                // Parse HTTP response
+                var quantityParser = new Regex(@"\((\d+)\)");
+                using (var responseStream = await response.Content.ReadAsStreamAsync())
                 {
-                    // Find the "result , "ingredients" and "station" related to the current recipe
-                    var rowResultTd = row.QuerySelector("td.result") ?? lastResultTd;
-                    var rowIngredientsTd = row.QuerySelector("td.ingredients") ?? lastIngredientsTd;
-                    var rowCraftingStationTd = row.QuerySelector("td.station") ?? lastCraftingStationTd;
-
-                    lastResultTd = rowResultTd;
-                    lastIngredientsTd = rowIngredientsTd;
-                    lastCraftingStationTd = rowCraftingStationTd;
-
-
-                    // Get information about the resulting item
-                    var resultFirstImgElement = rowResultTd.QuerySelector<IHtmlImageElement>("img");
-                    var resultQuantityStr = rowResultTd.QuerySelector(".note-text")?.TextContent ?? "(1)";
-                    resultQuantityStr = quantityParser.Match(resultQuantityStr).Groups[1].Value;
-                    int resultQuantity = int.Parse(resultQuantityStr);
-                    var resultingItem = new QuantifiedItemEntry
+                    var parser = new HtmlParser();
+                    var parsedPage = await parser.ParseDocumentAsync(responseStream);
+                    var recipeRows = parsedPage.QuerySelectorAll("div.crafts tr[data-rowid]");
+                    var foundRows = recipeRows.Select(r => r.OuterHtml).ToList();
+                    IElement lastResultTd = null,
+                        lastIngredientsTd = null,
+                        lastCraftingStationTd = null;
+                    var recipesResults = new List<RecipeEntry>();
+                    foreach (var row in recipeRows)
                     {
-                        Item = new ItemEntry
-                        {
-                            Name = resultFirstImgElement.AlternativeText,
-                            ImageUrl = resultFirstImgElement.Source,
-                        },
-                        Quantity = resultQuantity,
-                    };
+                        // Find the "result , "ingredients" and "station" related to the current recipe
+                        var rowResultTd = row.QuerySelector("td.result") ?? lastResultTd;
+                        var rowIngredientsTd = row.QuerySelector("td.ingredients") ?? lastIngredientsTd;
+                        var rowCraftingStationTd = row.QuerySelector("td.station") ?? lastCraftingStationTd;
+
+                        lastResultTd = rowResultTd;
+                        lastIngredientsTd = rowIngredientsTd;
+                        lastCraftingStationTd = rowCraftingStationTd;
 
 
-                    // Get information about the Crafting Station(s)
-                    var craftingStationImgElements = rowCraftingStationTd.QuerySelectorAll<IHtmlImageElement>("img:not([title])");
-                    var craftingStations = craftingStationImgElements.Select(img => new ItemEntry
-                    {
-                        Name = img.AlternativeText,
-                        ImageUrl = img.Source,
-                    });
-                    if (craftingStations.Any() == false)
-                        craftingStations = new[]
+                        // Get information about the resulting item
+                        var resultFirstImgElement = rowResultTd.QuerySelector<IHtmlImageElement>("img");
+                        var resultQuantityStr = rowResultTd.QuerySelector(".note-text")?.TextContent ?? "(1)";
+                        resultQuantityStr = quantityParser.Match(resultQuantityStr).Groups[1].Value;
+                        int resultQuantity = int.Parse(resultQuantityStr);
+                        var resultingItem = new QuantifiedItemEntry
                         {
-                            new ItemEntry
+                            Item = new ItemEntry
                             {
-                                Name = "By Hand",
-                                ImageUrl = null,
-                            }
+                                Name = resultFirstImgElement.AlternativeText,
+                                ImageUrl = resultFirstImgElement.Source,
+                            },
+                            Quantity = resultQuantity,
                         };
 
-                    // Get information about the Ingredient(s)
-                    var recipeIngredients = new List<QuantifiedItemEntry>();
-                    foreach (var ingredientLi in rowIngredientsTd.QuerySelectorAll<IHtmlListItemElement>("li"))
-                    {
-                        var ingredientImg = ingredientLi.QuerySelector<IHtmlImageElement>("img");
-                        var ingredientEntry = new ItemEntry
-                        {
-                            Name = ingredientImg.AlternativeText,
-                            ImageUrl = ingredientImg.Source,
-                        };
 
-                        string ingredientQuantityStr = ingredientLi.QuerySelector(".note-text")?.TextContent ?? "(1)";
-                        ingredientQuantityStr = quantityParser.Match(ingredientQuantityStr).Groups[1].Value;
-                        int ingredientQuantity = int.Parse(ingredientQuantityStr);
-                        recipeIngredients.Add(new QuantifiedItemEntry
+                        // Get information about the Crafting Station(s)
+                        var craftingStationImgElements = rowCraftingStationTd.QuerySelectorAll<IHtmlImageElement>("img:not([title])");
+                        var craftingStations = craftingStationImgElements.Select(img => new ItemEntry
                         {
-                            Item = ingredientEntry,
-                            Quantity = ingredientQuantity,
+                            Name = img.AlternativeText,
+                            ImageUrl = img.Source,
+                        });
+                        if (craftingStations.Any() == false)
+                            craftingStations = new[]
+                            {
+                                new ItemEntry
+                                {
+                                    Name = "By Hand",
+                                    ImageUrl = null,
+                                }
+                            };
+
+                        // Get information about the Ingredient(s)
+                        var recipeIngredients = new List<QuantifiedItemEntry>();
+                        foreach (var ingredientLi in rowIngredientsTd.QuerySelectorAll<IHtmlListItemElement>("li"))
+                        {
+                            var ingredientImg = ingredientLi.QuerySelector<IHtmlImageElement>("img");
+                            var ingredientEntry = new ItemEntry
+                            {
+                                Name = ingredientImg.AlternativeText,
+                                ImageUrl = ingredientImg.Source,
+                            };
+
+                            string ingredientQuantityStr = ingredientLi.QuerySelector(".note-text")?.TextContent ?? "(1)";
+                            ingredientQuantityStr = quantityParser.Match(ingredientQuantityStr).Groups[1].Value;
+                            int ingredientQuantity = int.Parse(ingredientQuantityStr);
+                            recipeIngredients.Add(new QuantifiedItemEntry
+                            {
+                                Item = ingredientEntry,
+                                Quantity = ingredientQuantity,
+                            });
+                        }
+
+
+                        // Add the generated recipe to the results
+                        recipesResults.Add(new RecipeEntry
+                        {
+                            ResultingItem = resultingItem,
+                            CraftingStations = craftingStations.ToArray(),
+                            Ingredients = recipeIngredients,
                         });
                     }
 
-
-                    // Add the generated recipe to the results
-                    recipesResults.Add(new RecipeEntry
+                    // Find results by matching typed search
+                    var matchingRecipes = recipesResults
+                        .Where(recipe => recipe.ResultingItem.Item.Name.Equals(selectedItemStr, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                    int totalMatchingRecipes = matchingRecipes.Count;
+                    QuantifiedRecipeEntry chosenRecipe = new QuantifiedRecipeEntry
                     {
-                        ResultingItem = resultingItem,
-                        CraftingStations = craftingStations.ToArray(),
-                        Ingredients = recipeIngredients,
-                    });
-                }
+                        Quantity = 1,
+                        Recipe = null,
+                    };
+                    if (totalMatchingRecipes == 1)
+                    {
+                        // If there was a single match, add it to the recipes list right away
+                        chosenRecipe.Recipe = matchingRecipes.First();
+                    }
+                    else if (totalMatchingRecipes > 1)
+                    {
+                        // For multiple matches (items with more than one recipe), display a "picker" dialog, so that the user
+                        // can choose between one of the available recipes
+                        var recipePickerDialog = new RecipePickerDialog(matchingRecipes);
+                        var dialogResult = await recipePickerDialog.ShowAsync();
+                        if (dialogResult == ContentDialogResult.Primary)
+                            chosenRecipe.Recipe = recipePickerDialog.SelectedRecipe;
+                    }
+                    else
+                    {
+                        _searchBarFlyoutText.Text = $@"Could not find any crafting recipes for item ""{selectedItemStr}""!";
+                        FlyoutBase.ShowAttachedFlyout(_searchBar);
+                    }
 
-                // Find results by matching typed search
-                var matchingRecipes = recipesResults
-                    .Where(recipe => recipe.ResultingItem.Item.Name.Equals(selectedItemStr, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-                int totalMatchingRecipes = matchingRecipes.Count;
-                QuantifiedRecipeEntry chosenRecipe = new QuantifiedRecipeEntry
-                {
-                    Quantity = 1,
-                    Recipe = null,
-                };
-                if (totalMatchingRecipes == 1)
-                {
-                    // If there was a single match, add it to the recipes list right away
-                    chosenRecipe.Recipe = matchingRecipes.First();
+                    // If a recipe has been picked, add it to our list of current recipes
+                    if (chosenRecipe.Recipe != null)
+                        RecipesList.Add(chosenRecipe);
                 }
-                else
-                {
-                    // For multiple matches (items with more than one recipe), display a "picker" dialog, so that the user
-                    // can choose between one of the available recipes
-                    var recipePickerDialog = new RecipePickerDialog(matchingRecipes);
-                    var dialogResult = await recipePickerDialog.ShowAsync();
-                    if (dialogResult == ContentDialogResult.Primary)
-                        chosenRecipe.Recipe = recipePickerDialog.SelectedRecipe;
-                }
-
-                // If a recipe has been picked, add it to our list of current recipes
-                if (chosenRecipe.Recipe != null)
-                    RecipesList.Add(chosenRecipe);
+            }
+            finally
+            {
+                // Re-enable search box after conclusion of processing
+                sender.IsEnabled = true;
             }
         }
 
@@ -276,9 +292,6 @@ namespace TerrariaCraftingCalculator
         /// <summary>Called when the quantity of a recipe changed.</summary>
         /// <param name="sender">Reference to the <see cref="TextBox"/> where the user picked an entry.</param>
         /// <param name="args">Event information.</param>
-        private void RecipeQuantityChanged(object sender, TextChangedEventArgs args)
-        {
-            RefreshTotalIngredientsList();
-        }
+        private void RecipeQuantityChanged(object sender, TextChangedEventArgs args) => RefreshTotalIngredientsList();
     }
 }
