@@ -76,7 +76,7 @@
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Quantity to craft:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
                         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                             <TextBox Grid.Column="1" Text="{Binding Path=Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" TextAlignment="Center" Margin="5,0" TextChanged="RecipeQuantityChanged" VerticalAlignment="Center" />
-                            <Button HorizontalAlignment="Stretch" Click="ButtonDecreaseItemQuantityInCraftingList">
+                            <Button HorizontalAlignment="Stretch" Click="ButtonDecreaseItemQuantityInCraftingList" IsEnabled="False">
                                 <Button.Content>
                                     <SymbolIcon Symbol="Remove" />
                                 </Button.Content>

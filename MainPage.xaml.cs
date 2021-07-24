@@ -1,6 +1,7 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -301,7 +302,16 @@ namespace TerrariaCraftingCalculator
         /// <summary>Called when the quantity of a recipe changed.</summary>
         /// <param name="sender">Reference to the <see cref="TextBox"/> where the user picked an entry.</param>
         /// <param name="args">Event information.</param>
-        private void RecipeQuantityChanged(object sender, TextChangedEventArgs args) => RefreshTotalIngredientsList();
+        private void RecipeQuantityChanged(object sender, TextChangedEventArgs args)
+        {
+            // Try to parse the new value to see if it is a valid number
+            var textBox = (TextBox)sender;
+            if (int.TryParse(textBox.Text, out int typedNumber) || typedNumber < 1)
+            {
+                // TODO: display some kind of tooltip and/or indication that the typed number is invalid
+            }
+            RefreshTotalIngredientsList();
+        }
 
 
         /// <summary>Called when the "plus" button is clicked in the list of items to craft, in order to increase the crafting amount of an item.</summary>
@@ -310,8 +320,8 @@ namespace TerrariaCraftingCalculator
         private void ButtonIncreaseItemQuantityInCraftingList(object sender, RoutedEventArgs e)
         {
             // Use the visual tree to find the "quantity" text box related to the item in the list
-            var buttonRef = (Button)sender;
-            var closestStackPanel = VisualTreeHelperUtilities.FindClosestParentOfType<StackPanel>(buttonRef);
+            var increaseQuantityButton = (Button)sender;
+            var closestStackPanel = VisualTreeHelperUtilities.FindClosestParentOfType<StackPanel>(increaseQuantityButton);
             var quantityTextBox = VisualTreeHelperUtilities.GetAllChildren(closestStackPanel)
                 .OfType<TextBox>()
                 .Single();
@@ -320,6 +330,17 @@ namespace TerrariaCraftingCalculator
             if (int.TryParse(quantityTextBox.Text, out int currentQuantity) == false)
                 return;
             quantityTextBox.Text = (++currentQuantity).ToString();
+
+            // Enable the "decrease" button when necessary
+            if (currentQuantity > 1)
+            {
+                var removeSymbol = VisualTreeHelperUtilities.GetAllChildren(closestStackPanel)
+                    .OfType<SymbolIcon>()
+                    .Where(symbolIcon => symbolIcon.Symbol == Symbol.Remove)
+                    .Single();
+                var decreaseQuantityButton = VisualTreeHelperUtilities.FindClosestParentOfType<Button>(removeSymbol);
+                decreaseQuantityButton.IsEnabled = true;
+            }
         }
 
 
@@ -339,6 +360,10 @@ namespace TerrariaCraftingCalculator
             if (int.TryParse(quantityTextBox.Text, out int currentQuantity) == false)
                 return;
             quantityTextBox.Text = (--currentQuantity).ToString();
+
+            // Disable the "decrease" button when necessary
+            if (currentQuantity <= 1)
+                buttonRef.IsEnabled = false;
         }
 
 
