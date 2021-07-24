@@ -48,7 +48,7 @@
             Grid.Row="2"
             Grid.ColumnSpan="2"
             ItemsSource="{Binding ElementName=AppMainPage, Path=RecipesList}"
-            d:ItemsSource="{Binding Source={StaticResource designData}, Path=ItemsToCraft}"
+            d:ItemsSource="{StaticResource itemsToCraftDesignData}"
             Background="LightGray">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">

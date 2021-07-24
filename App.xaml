@@ -2,8 +2,281 @@
     x:Class="TerrariaCraftingCalculator.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TerrariaCraftingCalculator">
+    xmlns:local="using:TerrariaCraftingCalculator"
+    xmlns:data="using:TerrariaCraftingCalculator.Data"
+    xmlns:model="using:TerrariaCraftingCalculator.Models">
     <Application.Resources>
-        <local:DesignData x:Key="designData" />
+        <!-- A mock collection of "items to craft" to be displayed in Visual Studio's XAML previewer, in order to make it easier to preview the Main Page's UI. -->
+        <data:QuantifiedRecipeEntryObservableCollection x:Key="itemsToCraftDesignData">
+            <model:QuantifiedRecipeEntry Quantity="3">
+                <model:QuantifiedRecipeEntry.Recipe>
+                    <model:RecipeEntry>
+                        <model:RecipeEntry.ResultingItem>
+                            <model:QuantifiedItemEntry Quantity="1">
+                                <model:QuantifiedItemEntry.Item>
+                                    <model:ItemEntry Name="Ironskin Potion" />
+                                </model:QuantifiedItemEntry.Item>
+                            </model:QuantifiedItemEntry>
+                        </model:RecipeEntry.ResultingItem>
+                        <model:RecipeEntry.Ingredients>
+                            <data:QuantifiedItemEntryObservableCollection>
+                                <model:QuantifiedItemEntry Quantity="1">
+                                    <model:QuantifiedItemEntry.Item>
+                                        <model:ItemEntry Name="Bottled Water" />
+                                    </model:QuantifiedItemEntry.Item>
+                                </model:QuantifiedItemEntry>
+                                <model:QuantifiedItemEntry Quantity="1">
+                                    <model:QuantifiedItemEntry.Item>
+                                        <model:ItemEntry Name="Daybloom" />
+                                    </model:QuantifiedItemEntry.Item>
+                                </model:QuantifiedItemEntry>
+                                <model:QuantifiedItemEntry Quantity="1">
+                                    <model:QuantifiedItemEntry.Item>
+                                        <model:ItemEntry Name="Iron Ore" />
+                                    </model:QuantifiedItemEntry.Item>
+                                </model:QuantifiedItemEntry>
+                            </data:QuantifiedItemEntryObservableCollection>
+                        </model:RecipeEntry.Ingredients>
+                        <model:RecipeEntry.CraftingStations>
+                            <data:ItemEntryObservableCollection>
+                                <model:ItemEntry Name="Placed Bottle" />
+                                <model:ItemEntry Name="Alchemy Table" />
+                            </data:ItemEntryObservableCollection>
+                        </model:RecipeEntry.CraftingStations>
+                    </model:RecipeEntry>
+                </model:QuantifiedRecipeEntry.Recipe>
+            </model:QuantifiedRecipeEntry>
+            <model:QuantifiedRecipeEntry Quantity="1">
+                <model:QuantifiedRecipeEntry.Recipe>
+                    <model:RecipeEntry>
+                        <model:RecipeEntry.ResultingItem>
+                            <model:QuantifiedItemEntry Quantity="1">
+                                <model:QuantifiedItemEntry.Item>
+                                    <model:ItemEntry Name="Megashark" />
+                                </model:QuantifiedItemEntry.Item>
+                            </model:QuantifiedItemEntry>
+                        </model:RecipeEntry.ResultingItem>
+                        <model:RecipeEntry.Ingredients>
+                            <data:QuantifiedItemEntryObservableCollection>
+                                <model:QuantifiedItemEntry Quantity="1">
+                                    <model:QuantifiedItemEntry.Item>
+                                        <model:ItemEntry Name="Minishark" />
+                                    </model:QuantifiedItemEntry.Item>
+                                </model:QuantifiedItemEntry>
+                                <model:QuantifiedItemEntry Quantity="1">
+                                    <model:QuantifiedItemEntry.Item>
+                                        <model:ItemEntry Name="Illegal Gun Parts" />
+                                    </model:QuantifiedItemEntry.Item>
+                                </model:QuantifiedItemEntry>
+                                <model:QuantifiedItemEntry Quantity="5">
+                                    <model:QuantifiedItemEntry.Item>
+                                        <model:ItemEntry Name="Shark Fin" />
+                                    </model:QuantifiedItemEntry.Item>
+                                </model:QuantifiedItemEntry>
+                                <model:QuantifiedItemEntry Quantity="20">
+                                    <model:QuantifiedItemEntry.Item>
+                                        <model:ItemEntry Name="Soul of Might" />
+                                    </model:QuantifiedItemEntry.Item>
+                                </model:QuantifiedItemEntry>
+                            </data:QuantifiedItemEntryObservableCollection>
+                        </model:RecipeEntry.Ingredients>
+                        <model:RecipeEntry.CraftingStations>
+                            <data:ItemEntryObservableCollection>
+                                <model:ItemEntry Name="Mythril Anvil" />
+                                <model:ItemEntry Name="Orichalcum Anvil" />
+                            </data:ItemEntryObservableCollection>
+                        </model:RecipeEntry.CraftingStations>
+                    </model:RecipeEntry>
+                </model:QuantifiedRecipeEntry.Recipe>
+            </model:QuantifiedRecipeEntry>
+            <model:QuantifiedRecipeEntry Quantity="1">
+                <model:QuantifiedRecipeEntry.Recipe>
+                    <model:RecipeEntry>
+                        <model:RecipeEntry.ResultingItem>
+                            <model:QuantifiedItemEntry Quantity="1">
+                                <model:QuantifiedItemEntry.Item>
+                                    <model:ItemEntry Name="Molten Charm" />
+                                </model:QuantifiedItemEntry.Item>
+                            </model:QuantifiedItemEntry>
+                        </model:RecipeEntry.ResultingItem>
+                        <model:RecipeEntry.Ingredients>
+                            <data:QuantifiedItemEntryObservableCollection>
+                                <model:QuantifiedItemEntry Quantity="1">
+                                    <model:QuantifiedItemEntry.Item>
+                                        <model:ItemEntry Name="Lava Charm" />
+                                    </model:QuantifiedItemEntry.Item>
+                                </model:QuantifiedItemEntry>
+                                <model:QuantifiedItemEntry Quantity="1">
+                                    <model:QuantifiedItemEntry.Item>
+                                        <model:ItemEntry Name="Obsidian Skull" />
+                                    </model:QuantifiedItemEntry.Item>
+                                </model:QuantifiedItemEntry>
+                            </data:QuantifiedItemEntryObservableCollection>
+                        </model:RecipeEntry.Ingredients>
+                        <model:RecipeEntry.CraftingStations>
+                            <data:ItemEntryObservableCollection>
+                                <model:ItemEntry Name="Tinkerer's Workshop" />
+                            </data:ItemEntryObservableCollection>
+                        </model:RecipeEntry.CraftingStations>
+                    </model:RecipeEntry>
+                </model:QuantifiedRecipeEntry.Recipe>
+            </model:QuantifiedRecipeEntry>
+            <model:QuantifiedRecipeEntry Quantity="3">
+                <model:QuantifiedRecipeEntry.Recipe>
+                    <model:RecipeEntry>
+                        <model:RecipeEntry.ResultingItem>
+                            <model:QuantifiedItemEntry Quantity="30">
+                                <model:QuantifiedItemEntry.Item>
+                                    <model:ItemEntry Name="Silk Rope" />
+                                </model:QuantifiedItemEntry.Item>
+                            </model:QuantifiedItemEntry>
+                        </model:RecipeEntry.ResultingItem>
+                        <model:RecipeEntry.Ingredients>
+                            <data:QuantifiedItemEntryObservableCollection>
+                                <model:QuantifiedItemEntry Quantity="1">
+                                    <model:QuantifiedItemEntry.Item>
+                                        <model:ItemEntry Name="Silk" />
+                                    </model:QuantifiedItemEntry.Item>
+                                </model:QuantifiedItemEntry>
+                            </data:QuantifiedItemEntryObservableCollection>
+                        </model:RecipeEntry.Ingredients>
+                        <model:RecipeEntry.CraftingStations>
+                            <data:ItemEntryObservableCollection>
+                                <model:ItemEntry Name="Loom" />
+                            </data:ItemEntryObservableCollection>
+                        </model:RecipeEntry.CraftingStations>
+                    </model:RecipeEntry>
+                </model:QuantifiedRecipeEntry.Recipe>
+            </model:QuantifiedRecipeEntry>
+        </data:QuantifiedRecipeEntryObservableCollection>
+
+        
+        <!-- A mock collection of "available recipes" to be displayed in Visual Studio's XAML previewer, in order to make it easier to preview the Recipe Picker dialog's UI. -->
+        <data:RecipeEntryObservableCollection x:Key="availableRecipeOptionsDesignData">
+            <model:RecipeEntry>
+                <model:RecipeEntry.ResultingItem>
+                    <model:QuantifiedItemEntry Quantity="1">
+                        <model:QuantifiedItemEntry.Item>
+                            <model:ItemEntry Name="Ironskin Potion" />
+                        </model:QuantifiedItemEntry.Item>
+                    </model:QuantifiedItemEntry>
+                </model:RecipeEntry.ResultingItem>
+                <model:RecipeEntry.Ingredients>
+                    <data:QuantifiedItemEntryObservableCollection>
+                        <model:QuantifiedItemEntry Quantity="1">
+                            <model:QuantifiedItemEntry.Item>
+                                <model:ItemEntry Name="Bottled Water" />
+                            </model:QuantifiedItemEntry.Item>
+                        </model:QuantifiedItemEntry>
+                        <model:QuantifiedItemEntry Quantity="1">
+                            <model:QuantifiedItemEntry.Item>
+                                <model:ItemEntry Name="Daybloom" />
+                            </model:QuantifiedItemEntry.Item>
+                        </model:QuantifiedItemEntry>
+                        <model:QuantifiedItemEntry Quantity="1">
+                            <model:QuantifiedItemEntry.Item>
+                                <model:ItemEntry Name="Iron Ore" />
+                            </model:QuantifiedItemEntry.Item>
+                        </model:QuantifiedItemEntry>
+                    </data:QuantifiedItemEntryObservableCollection>
+                </model:RecipeEntry.Ingredients>
+                <model:RecipeEntry.CraftingStations>
+                    <data:ItemEntryObservableCollection>
+                        <model:ItemEntry Name="Placed Bottle" />
+                        <model:ItemEntry Name="Alchemy Table" />
+                    </data:ItemEntryObservableCollection>
+                </model:RecipeEntry.CraftingStations>
+            </model:RecipeEntry>
+            <model:RecipeEntry>
+                <model:RecipeEntry.ResultingItem>
+                    <model:QuantifiedItemEntry Quantity="1">
+                        <model:QuantifiedItemEntry.Item>
+                            <model:ItemEntry Name="Megashark" />
+                        </model:QuantifiedItemEntry.Item>
+                    </model:QuantifiedItemEntry>
+                </model:RecipeEntry.ResultingItem>
+                <model:RecipeEntry.Ingredients>
+                    <data:QuantifiedItemEntryObservableCollection>
+                        <model:QuantifiedItemEntry Quantity="1">
+                            <model:QuantifiedItemEntry.Item>
+                                <model:ItemEntry Name="Minishark" />
+                            </model:QuantifiedItemEntry.Item>
+                        </model:QuantifiedItemEntry>
+                        <model:QuantifiedItemEntry Quantity="1">
+                            <model:QuantifiedItemEntry.Item>
+                                <model:ItemEntry Name="Illegal Gun Parts" />
+                            </model:QuantifiedItemEntry.Item>
+                        </model:QuantifiedItemEntry>
+                        <model:QuantifiedItemEntry Quantity="5">
+                            <model:QuantifiedItemEntry.Item>
+                                <model:ItemEntry Name="Shark Fin" />
+                            </model:QuantifiedItemEntry.Item>
+                        </model:QuantifiedItemEntry>
+                        <model:QuantifiedItemEntry Quantity="20">
+                            <model:QuantifiedItemEntry.Item>
+                                <model:ItemEntry Name="Soul of Might" />
+                            </model:QuantifiedItemEntry.Item>
+                        </model:QuantifiedItemEntry>
+                    </data:QuantifiedItemEntryObservableCollection>
+                </model:RecipeEntry.Ingredients>
+                <model:RecipeEntry.CraftingStations>
+                    <data:ItemEntryObservableCollection>
+                        <model:ItemEntry Name="Mythril Anvil" />
+                        <model:ItemEntry Name="Orichalcum Anvil" />
+                    </data:ItemEntryObservableCollection>
+                </model:RecipeEntry.CraftingStations>
+            </model:RecipeEntry>
+            <model:RecipeEntry>
+                <model:RecipeEntry.ResultingItem>
+                    <model:QuantifiedItemEntry Quantity="1">
+                        <model:QuantifiedItemEntry.Item>
+                            <model:ItemEntry Name="Molten Charm" />
+                        </model:QuantifiedItemEntry.Item>
+                    </model:QuantifiedItemEntry>
+                </model:RecipeEntry.ResultingItem>
+                <model:RecipeEntry.Ingredients>
+                    <data:QuantifiedItemEntryObservableCollection>
+                        <model:QuantifiedItemEntry Quantity="1">
+                            <model:QuantifiedItemEntry.Item>
+                                <model:ItemEntry Name="Lava Charm" />
+                            </model:QuantifiedItemEntry.Item>
+                        </model:QuantifiedItemEntry>
+                        <model:QuantifiedItemEntry Quantity="1">
+                            <model:QuantifiedItemEntry.Item>
+                                <model:ItemEntry Name="Obsidian Skull" />
+                            </model:QuantifiedItemEntry.Item>
+                        </model:QuantifiedItemEntry>
+                    </data:QuantifiedItemEntryObservableCollection>
+                </model:RecipeEntry.Ingredients>
+                <model:RecipeEntry.CraftingStations>
+                    <data:ItemEntryObservableCollection>
+                        <model:ItemEntry Name="Tinkerer's Workshop" />
+                    </data:ItemEntryObservableCollection>
+                </model:RecipeEntry.CraftingStations>
+            </model:RecipeEntry>
+            <model:RecipeEntry>
+                <model:RecipeEntry.ResultingItem>
+                    <model:QuantifiedItemEntry Quantity="30">
+                        <model:QuantifiedItemEntry.Item>
+                            <model:ItemEntry Name="Silk Rope" />
+                        </model:QuantifiedItemEntry.Item>
+                    </model:QuantifiedItemEntry>
+                </model:RecipeEntry.ResultingItem>
+                <model:RecipeEntry.Ingredients>
+                    <data:QuantifiedItemEntryObservableCollection>
+                        <model:QuantifiedItemEntry Quantity="1">
+                            <model:QuantifiedItemEntry.Item>
+                                <model:ItemEntry Name="Silk" />
+                            </model:QuantifiedItemEntry.Item>
+                        </model:QuantifiedItemEntry>
+                    </data:QuantifiedItemEntryObservableCollection>
+                </model:RecipeEntry.Ingredients>
+                <model:RecipeEntry.CraftingStations>
+                    <data:ItemEntryObservableCollection>
+                        <model:ItemEntry Name="Loom" />
+                    </data:ItemEntryObservableCollection>
+                </model:RecipeEntry.CraftingStations>
+            </model:RecipeEntry>
+        </data:RecipeEntryObservableCollection>
     </Application.Resources>
 </Application>
