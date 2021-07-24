@@ -44,6 +44,8 @@ namespace TerrariaCraftingCalculator
 
 
         // INSTANCE PROPERTIES
+        /// <summary>List of suggestions to be displayed while the user is typing in the "search box" of available items.</summary>
+        public ObservableCollection<string> SearchSuggestions { get; set; } = new ObservableCollection<string>();
         /// <summary>Holds the list of recipes added for crafting.</summary>
         public ObservableCollection<QuantifiedRecipeEntry> RecipesList { get; set; } = new ObservableCollection<QuantifiedRecipeEntry>();
         /// <summary>The calculated list of total ingredients that should be gathered for crafting.</summary>
@@ -67,6 +69,9 @@ namespace TerrariaCraftingCalculator
         /// <param name="args">Event information.</param>
         private async void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
+            // Clear previous search suggestions
+            SearchSuggestions.Clear();
+
             // Wait for some time before actually performing the HTTP request to the server, to allow the user to finish typing.
             // If the user keeps typing during that time, previous executions of this method will get cancelled in favor of new ones.
             if (_cancellationTokenSource != null)
@@ -105,7 +110,8 @@ namespace TerrariaCraftingCalculator
                         .GetProperty("suggestions")
                         .EnumerateArray()
                         .Select(element => element.GetString());
-                    sender.ItemsSource = suggestionsArr.ToArray();
+                    foreach (var suggestion in suggestionsArr)
+                        SearchSuggestions.Add(suggestion);
                 }
                 catch (Exception ex) when (ex is KeyNotFoundException || ex is InvalidOperationException)
                 {

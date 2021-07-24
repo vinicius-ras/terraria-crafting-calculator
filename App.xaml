@@ -6,6 +6,14 @@
     xmlns:data="using:TerrariaCraftingCalculator.Data"
     xmlns:model="using:TerrariaCraftingCalculator.Models">
     <Application.Resources>
+        <!-- A mock collection of "search suggestions" to be displayed in Visual Studio's XAML previewer, in order to make it easier to preview the Main Page's UI. -->
+        <data:StringObservableCollection x:Key="searchBarDesignData">
+            <x:String>Ironskin Potion</x:String>
+            <x:String>Megashark</x:String>
+            <x:String>Molten Charm</x:String>
+            <x:String>Silk Rope</x:String>
+        </data:StringObservableCollection>
+        
         <!-- A mock collection of "items to craft" to be displayed in Visual Studio's XAML previewer, in order to make it easier to preview the Main Page's UI. -->
         <data:QuantifiedRecipeEntryObservableCollection x:Key="itemsToCraftDesignData">
             <model:QuantifiedRecipeEntry Quantity="3">

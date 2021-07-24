@@ -30,7 +30,9 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Text="Search for an item:" VerticalAlignment="Center" Style="{StaticResource titleTextBlock}"/>
-        <AutoSuggestBox x:Name="_searchBar" Grid.Column="1" PlaceholderText="Type an item name..." QueryIcon="Find" TextChanged="AutoSuggestBox_TextChanged" SuggestionChosen="AutoSuggestBox_SuggestionChosen" d:ItemsSource="{Binding Source={StaticResource designData}, Path=ItemSuggestions}" HorizontalAlignment="Stretch">
+        <AutoSuggestBox x:Name="_searchBar" Grid.Column="1" PlaceholderText="Type an item name..." QueryIcon="Find" TextChanged="AutoSuggestBox_TextChanged" SuggestionChosen="AutoSuggestBox_SuggestionChosen"
+                        ItemsSource="{Binding ElementName=AppMainPage, Path=SearchSuggestions}"
+                        d:ItemsSource="{StaticResource searchBarDesignData}">
             <AutoSuggestBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" />
@@ -43,7 +45,7 @@
             </FlyoutBase.AttachedFlyout>
         </AutoSuggestBox>
 
-        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,20,0,0" Text="Items to craft:"  Style="{StaticResource titleTextBlock}" />
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,20,0,0" Text="Items to craft:" Style="{StaticResource titleTextBlock}" />
         <ListView
             Grid.Row="2"
             Grid.ColumnSpan="2"
