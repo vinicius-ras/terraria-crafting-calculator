@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TerrariaCraftingCalculator"
+    xmlns:model="using:TerrariaCraftingCalculator.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
@@ -51,21 +52,22 @@
         </AutoSuggestBox>
 
         <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,20,0,0" Text="Items to craft:" Style="{StaticResource titleTextBlock}" />
-        <ListView
+        <GridView
             Grid.Row="2"
             Grid.ColumnSpan="2"
             ItemsSource="{Binding ElementName=AppMainPage, Path=RecipesList}"
             d:ItemsSource="{StaticResource itemsToCraftDesignData}"
-            Background="LightGray">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Margin" Value="0" />
+            VerticalContentAlignment="Stretch"
+            Background="LightGray" Padding="5">
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="5" />
                 </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="White" Padding="5" Margin="0,0,0,5" ColumnSpacing="10" RowSpacing="15">
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="model:QuantifiedRecipeEntry">
+                    <Grid BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="White" Padding="15" Margin="0,0,0,5" ColumnSpacing="10" RowSpacing="15">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
@@ -76,7 +78,7 @@
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
-                        
+
                         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                             <Image Style="{StaticResource itemImage}">
                                 <Image.Source>
@@ -152,8 +154,9 @@
                         </muxc:ItemsRepeater>
                     </Grid>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </GridView.ItemTemplate>
+        </GridView>
+
         <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Margin="0,20,0,0" Text="Total ingredients:" Style="{StaticResource titleTextBlock}" />
         <muxc:ItemsRepeater Grid.Row="4" Grid.ColumnSpan="2"
                             ItemsSource="{Binding ElementName=AppMainPage, Path=TotalIngredientsList}"
