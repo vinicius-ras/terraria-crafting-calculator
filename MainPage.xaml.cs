@@ -173,7 +173,7 @@ namespace TerrariaCraftingCalculator
                             Item = new ItemEntry
                             {
                                 Name = resultFirstImgElement.AlternativeText,
-                                ImageUrl = resultFirstImgElement.Source,
+                                ImageUrl = resultFirstImgElement.Dataset["src"],
                             },
                             Quantity = resultQuantity,
                         };
@@ -184,7 +184,7 @@ namespace TerrariaCraftingCalculator
                         var craftingStations = craftingStationImgElements.Select(img => new ItemEntry
                         {
                             Name = img.AlternativeText,
-                            ImageUrl = img.Source,
+                            ImageUrl = img.Dataset["src"],
                         });
                         if (craftingStations.Any() == false)
                             craftingStations = new[]
@@ -204,7 +204,7 @@ namespace TerrariaCraftingCalculator
                             var ingredientEntry = new ItemEntry
                             {
                                 Name = ingredientImg.AlternativeText,
-                                ImageUrl = ingredientImg.Source,
+                                ImageUrl = ingredientImg.Dataset["src"],
                             };
 
                             string ingredientQuantityStr = ingredientLi.QuerySelector(".note-text")?.TextContent ?? "(1)";

@@ -6,13 +6,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    d:Width="600"
-    d:Height="600"
+    d:Width="1000"
+    d:Height="1000"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Name="AppMainPage">
     <Page.Resources>
         <Style x:Key="titleTextBlock" TargetType="TextBlock">
             <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style x:Key="itemImage" TargetType="Image">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Margin" Value="0,0,5,0" />
         </Style>
     </Page.Resources>
 
@@ -71,7 +76,15 @@
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Path=Recipe.ResultingItem.Item.Name}" />
+                        
+                        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                            <Image Style="{StaticResource itemImage}">
+                                <Image.Source>
+                                    <BitmapImage UriSource="{Binding Recipe.ResultingItem.Item.ImageUrl}" />
+                                </Image.Source>
+                            </Image>
+                            <TextBlock Text="{Binding Path=Recipe.ResultingItem.Item.Name}" VerticalAlignment="Center" />
+                        </StackPanel>
 
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Quantity to craft:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
                         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
@@ -101,8 +114,14 @@
                                         <StackPanel.Resources>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="FontSize" Value="10" />
+                                                <Setter Property="VerticalAlignment" Value="Center" />
                                             </Style>
                                         </StackPanel.Resources>
+                                        <Image Style="{StaticResource itemImage}">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="{Binding Item.ImageUrl}" />
+                                            </Image.Source>
+                                        </Image>
                                         <TextBlock Text="{Binding Quantity}" />
                                         <TextBlock Text="x" Margin="0,0,5,0" />
                                         <TextBlock Text="{Binding Item.Name}" />
@@ -121,6 +140,11 @@
                                                 <Setter Property="FontSize" Value="10" />
                                             </Style>
                                         </StackPanel.Resources>
+                                        <Image Style="{StaticResource itemImage}">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="{Binding ImageUrl}" />
+                                            </Image.Source>
+                                        </Image>
                                         <TextBlock Text="{Binding Name}" />
                                     </StackPanel>
                                 </DataTemplate>
@@ -132,10 +156,16 @@
         </ListView>
         <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Margin="0,20,0,0" Text="Total ingredients:" Style="{StaticResource titleTextBlock}" />
         <muxc:ItemsRepeater Grid.Row="4" Grid.ColumnSpan="2"
-                            ItemsSource="{Binding ElementName=AppMainPage, Path=TotalIngredientsList}">
+                            ItemsSource="{Binding ElementName=AppMainPage, Path=TotalIngredientsList}"
+                            d:ItemsSource="{StaticResource totalIngredientsDesignData}">
             <muxc:ItemsRepeater.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Padding="0,0,100,0">
+                        <Image Style="{StaticResource itemImage}">
+                            <Image.Source>
+                                <BitmapImage UriSource="{Binding Item.ImageUrl}" />
+                            </Image.Source>
+                        </Image>
                         <TextBlock Text="{Binding Quantity}" />
                         <TextBlock Text="x" Margin="0,0,5,0" />
                         <TextBlock Text="{Binding Item.Name}" />
