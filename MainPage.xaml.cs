@@ -1,7 +1,6 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
-using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -70,54 +69,55 @@ namespace TerrariaCraftingCalculator
         /// <param name="args">Event information.</param>
         private async void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            // Clear previous search suggestions
+            // Clear previous search suggestions, and cancel previous ongoing searches (if any)
             SearchSuggestions.Clear();
 
-            // Wait for some time before actually performing the HTTP request to the server, to allow the user to finish typing.
-            // If the user keeps typing during that time, previous executions of this method will get cancelled in favor of new ones.
             if (_cancellationTokenSource != null)
                 _cancellationTokenSource.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
-            var opGuid = Guid.NewGuid();
+
+            var cancellationToken = _cancellationTokenSource.Token;
             try
             {
-                await Task.Delay(TimeToWaitBeforeHttpRequest, _cancellationTokenSource.Token);
+                // Wait for some time before actually performing the HTTP request to the server, to allow the user to finish typing.
+                // If the user keeps typing during that time, previous executions of this method will get cancelled in favor of new ones.
+                await Task.Delay(TimeToWaitBeforeHttpRequest, cancellationToken);
+
+                // Perform an HTTP request to search for the item whose name the user has typed
+                var queryStringParams = new Dictionary<string, string>()
+                {
+                    { "controller", "UnifiedSearchSuggestionsController" },
+                    { "method", "getSuggestions" },
+                    { "format", "json" },
+                    { "query", HttpUtility.UrlEncode(sender.Text) },
+                };
+                var queryStringParamsKeyValue = queryStringParams.Select(keyVal => $"{keyVal.Key}={keyVal.Value}");
+                var targetUri = $"https://terraria.fandom.com/wikia.php?{string.Join("&", queryStringParamsKeyValue)}";
+                var response = await _httpClient.GetAsync(targetUri, cancellationToken);
+
+                // Parse response looking for name items in the search result
+                using (var responseStream = await response.Content.ReadAsStreamAsync())
+                using (var jsonDoc = await JsonDocument.ParseAsync(responseStream, cancellationToken: cancellationToken))
+                {
+                    IEnumerable<string> suggestionsArr;
+                    try
+                    {
+                        suggestionsArr = jsonDoc?.RootElement
+                            .GetProperty("suggestions")
+                            .EnumerateArray()
+                            .Select(element => element.GetString());
+                        foreach (var suggestion in suggestionsArr)
+                            SearchSuggestions.Add(suggestion);
+                    }
+                    catch (Exception ex) when (ex is KeyNotFoundException || ex is InvalidOperationException)
+                    {
+                        Debug.Fail("Failed to retrieve page suggestions form HTTP request.");
+                    }
+                }
             }
             catch (OperationCanceledException)
             {
                 return;
-            }
-
-            // Perform an HTTP request to search for the item whose name the user has typed
-            var queryStringParams = new Dictionary<string, string>()
-            {
-                { "controller", "UnifiedSearchSuggestionsController" },
-                { "method", "getSuggestions" },
-                { "format", "json" },
-                { "query", HttpUtility.UrlEncode(sender.Text) },
-            };
-            var queryStringParamsKeyValue = queryStringParams.Select(keyVal => $"{keyVal.Key}={keyVal.Value}");
-            var targetUri = $"https://terraria.fandom.com/wikia.php?{string.Join("&", queryStringParamsKeyValue)}";
-            var response = await _httpClient.GetAsync(targetUri);
-
-            // Parse response looking for name items in the search result
-            using (var responseStream = await response.Content.ReadAsStreamAsync())
-            using (var jsonDoc = await JsonDocument.ParseAsync(responseStream))
-            {
-                IEnumerable<string> suggestionsArr;
-                try
-                {
-                    suggestionsArr = jsonDoc?.RootElement
-                        .GetProperty("suggestions")
-                        .EnumerateArray()
-                        .Select(element => element.GetString());
-                    foreach (var suggestion in suggestionsArr)
-                        SearchSuggestions.Add(suggestion);
-                }
-                catch (Exception ex) when (ex is KeyNotFoundException || ex is InvalidOperationException)
-                {
-                    Debug.Fail("Failed to retrieve page suggestions form HTTP request.");
-                }
             }
         }
 
