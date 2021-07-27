@@ -57,8 +57,14 @@
             Grid.ColumnSpan="2"
             ItemsSource="{Binding ElementName=AppMainPage, Path=RecipesList}"
             d:ItemsSource="{StaticResource itemsToCraftDesignData}"
-            VerticalContentAlignment="Stretch"
-            Background="LightGray" Padding="5">
+            Background="LightGray"
+            Padding="5"
+            Margin="0,5,0,0"
+            CornerRadius="5"
+            BorderThickness="1"
+            BorderBrush="DimGray"
+            CanReorderItems="True"
+            AllowDrop="True">
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
                     <Setter Property="VerticalContentAlignment" Value="Stretch" />
@@ -158,12 +164,41 @@
         </GridView>
 
         <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Margin="0,20,0,0" Text="Total ingredients:" Style="{StaticResource titleTextBlock}" />
-        <muxc:ItemsRepeater Grid.Row="4" Grid.ColumnSpan="2"
-                            ItemsSource="{Binding ElementName=AppMainPage, Path=TotalIngredientsList}"
-                            d:ItemsSource="{StaticResource totalIngredientsDesignData}">
-            <muxc:ItemsRepeater.ItemTemplate>
+        <GridView
+            Grid.Row="4"
+            Grid.ColumnSpan="2"
+            ItemsSource="{Binding ElementName=AppMainPage, Path=TotalIngredientsList}"
+            d:ItemsSource="{StaticResource totalIngredientsDesignData}"
+            Padding="5"
+            Background="LightGray"
+            CornerRadius="5"
+            Margin="0,5,0,0"
+            BorderThickness="1"
+            BorderBrush="DimGray"
+            CanReorderItems="true"
+            AllowDrop="True"
+            IsItemClickEnabled="False">
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="5" />
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Padding="0,0,100,0">
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Padding="5"
+                        Background="White"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        CornerRadius="5"
+                        Width="200">
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </StackPanel.Resources>
                         <Image Style="{StaticResource itemImage}">
                             <Image.Source>
                                 <BitmapImage UriSource="{Binding Item.ImageUrl}" />
@@ -174,7 +209,7 @@
                         <TextBlock Text="{Binding Item.Name}" />
                     </StackPanel>
                 </DataTemplate>
-            </muxc:ItemsRepeater.ItemTemplate>
-        </muxc:ItemsRepeater>
+            </GridView.ItemTemplate>
+        </GridView>
     </Grid>
 </Page>
