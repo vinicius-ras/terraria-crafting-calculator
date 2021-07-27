@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TerrariaCraftingCalculator"
     xmlns:model="using:TerrariaCraftingCalculator.Models"
+    xmlns:component="using:TerrariaCraftingCalculator.Components"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
@@ -71,9 +72,14 @@
                     <Setter Property="Margin" Value="5" />
                 </Style>
             </GridView.ItemContainerStyle>
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <component:CustomGridViewPanel />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="model:QuantifiedRecipeEntry">
-                    <Grid BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="White" Padding="15" Margin="0,0,0,5" ColumnSpacing="10" RowSpacing="15">
+                    <Grid BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="White" Padding="15" RowSpacing="15" ColumnSpacing="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
@@ -181,9 +187,15 @@
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
                     <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="5" />
                 </Style>
             </GridView.ItemContainerStyle>
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <component:CustomGridViewPanel />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel
@@ -192,8 +204,7 @@
                         Background="White"
                         BorderBrush="Black"
                         BorderThickness="1"
-                        CornerRadius="5"
-                        Width="200">
+                        CornerRadius="5">
                         <StackPanel.Resources>
                             <Style TargetType="TextBlock">
                                 <Setter Property="VerticalAlignment" Value="Center" />

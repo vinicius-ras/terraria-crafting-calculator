@@ -119,6 +119,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\CustomGridViewPanel.cs" />
     <Compile Include="Data\ItemEntryObservableCollection.cs" />
     <Compile Include="Data\QuantifiedItemEntryObservableCollection.cs" />
     <Compile Include="Data\StringObservableCollection.cs" />
