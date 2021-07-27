@@ -5,6 +5,7 @@
     xmlns:local="using:TerrariaCraftingCalculator"
     xmlns:model="using:TerrariaCraftingCalculator.Models"
     xmlns:component="using:TerrariaCraftingCalculator.Components"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
@@ -29,7 +30,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
@@ -169,58 +170,66 @@
             </GridView.ItemTemplate>
         </GridView>
 
-        <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Margin="0,20,0,0" Text="Total ingredients:" Style="{StaticResource titleTextBlock}" />
-        <GridView
-            Grid.Row="4"
+        <controls:GridSplitter
+            Grid.Row="3"
             Grid.ColumnSpan="2"
-            ItemsSource="{Binding ElementName=AppMainPage, Path=TotalIngredientsList}"
-            d:ItemsSource="{StaticResource totalIngredientsDesignData}"
-            Padding="5"
-            Background="LightGray"
-            CornerRadius="5"
-            Margin="0,5,0,0"
-            BorderThickness="1"
-            BorderBrush="DimGray"
-            CanReorderItems="true"
-            AllowDrop="True"
-            IsItemClickEnabled="False">
-            <GridView.ItemContainerStyle>
-                <Style TargetType="GridViewItem">
-                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Margin" Value="5" />
-                </Style>
-            </GridView.ItemContainerStyle>
-            <GridView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <component:CustomGridViewPanel />
-                </ItemsPanelTemplate>
-            </GridView.ItemsPanel>
-            <GridView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel
-                        Orientation="Horizontal"
-                        Padding="5"
-                        Background="White"
-                        BorderBrush="Black"
-                        BorderThickness="1"
-                        CornerRadius="5">
-                        <StackPanel.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                            </Style>
-                        </StackPanel.Resources>
-                        <Image Style="{StaticResource itemImage}">
-                            <Image.Source>
-                                <BitmapImage UriSource="{Binding Item.ImageUrl}" />
-                            </Image.Source>
-                        </Image>
-                        <TextBlock Text="{Binding Quantity}" />
-                        <TextBlock Text="x" Margin="0,0,5,0" />
-                        <TextBlock Text="{Binding Item.Name}" />
-                    </StackPanel>
-                </DataTemplate>
-            </GridView.ItemTemplate>
-        </GridView>
+            Margin="0,10"
+            ResizeDirection="Rows"
+            ResizeBehavior="BasedOnAlignment" />
+
+
+        <controls:DockPanel Grid.Row="4" Grid.ColumnSpan="2" MinHeight="105">
+            <TextBlock controls:DockPanel.Dock="Top" Text="Total ingredients:" Style="{StaticResource titleTextBlock}" />
+            <GridView
+                ItemsSource="{Binding ElementName=AppMainPage, Path=TotalIngredientsList}"
+                d:ItemsSource="{StaticResource totalIngredientsDesignData}"
+                Padding="5"
+                Background="LightGray"
+                CornerRadius="5"
+                Margin="0,5,0,0"
+                BorderThickness="1"
+                BorderBrush="DimGray"
+                CanReorderItems="true"
+                AllowDrop="True"
+                IsItemClickEnabled="False">
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Margin" Value="5" />
+                    </Style>
+                </GridView.ItemContainerStyle>
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <component:CustomGridViewPanel />
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Padding="5"
+                            Background="White"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </StackPanel.Resources>
+                            <Image Style="{StaticResource itemImage}">
+                                <Image.Source>
+                                    <BitmapImage UriSource="{Binding Item.ImageUrl}" />
+                                </Image.Source>
+                            </Image>
+                            <TextBlock Text="{Binding Quantity}" />
+                            <TextBlock Text="x" Margin="0,0,5,0" />
+                            <TextBlock Text="{Binding Item.Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </controls:DockPanel>
     </Grid>
 </Page>
