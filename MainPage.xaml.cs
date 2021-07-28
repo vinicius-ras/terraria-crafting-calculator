@@ -259,13 +259,17 @@ namespace TerrariaCraftingCalculator
 
                     // If a recipe has been picked, add it to our list of current recipes
                     if (chosenRecipe.Recipe != null)
+                    {
                         RecipesList.Add(chosenRecipe);
+                        sender.Text = string.Empty;
+                    }
                 }
             }
             finally
             {
-                // Re-enable search box after conclusion of processing
+                // Re-enable search box after conclusion of processing, and try to focus it
                 sender.IsEnabled = true;
+                sender.Focus(FocusState.Keyboard);
             }
         }
 

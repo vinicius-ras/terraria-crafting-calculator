@@ -6,6 +6,13 @@
     xmlns:data="using:TerrariaCraftingCalculator.Data"
     xmlns:model="using:TerrariaCraftingCalculator.Models">
     <Application.Resources>
+        <!-- Style for items' images. -->
+        <Style x:Key="itemImage" TargetType="Image">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Margin" Value="0,0,5,0" />
+        </Style>
+        
         <!-- A mock collection of "search suggestions" to be displayed in Visual Studio's XAML previewer, in order to make it easier to preview the Main Page's UI. -->
         <data:StringObservableCollection x:Key="searchBarDesignData">
             <x:String>Ironskin Potion</x:String>
@@ -219,7 +226,7 @@
                 <model:RecipeEntry.ResultingItem>
                     <model:QuantifiedItemEntry Quantity="1">
                         <model:QuantifiedItemEntry.Item>
-                            <model:ItemEntry Name="Ironskin Potion" />
+                            <model:ItemEntry Name="Ironskin Potion" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/9/9f/Ironskin_Potion.png/revision/latest/scale-to-width-down/12?cb=20200516214320" />
                         </model:QuantifiedItemEntry.Item>
                     </model:QuantifiedItemEntry>
                 </model:RecipeEntry.ResultingItem>
@@ -227,25 +234,25 @@
                     <data:QuantifiedItemEntryObservableCollection>
                         <model:QuantifiedItemEntry Quantity="1">
                             <model:QuantifiedItemEntry.Item>
-                                <model:ItemEntry Name="Bottled Water" />
+                                <model:ItemEntry Name="Bottled Water" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/1/16/Bottled_Water.png/revision/latest/scale-to-width-down/20?cb=20200516200759" />
                             </model:QuantifiedItemEntry.Item>
                         </model:QuantifiedItemEntry>
                         <model:QuantifiedItemEntry Quantity="1">
                             <model:QuantifiedItemEntry.Item>
-                                <model:ItemEntry Name="Daybloom" />
+                                <model:ItemEntry Name="Daybloom" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/0/02/Daybloom.png/revision/latest/scale-to-width-down/12?cb=20200516211142" />
                             </model:QuantifiedItemEntry.Item>
                         </model:QuantifiedItemEntry>
                         <model:QuantifiedItemEntry Quantity="1">
                             <model:QuantifiedItemEntry.Item>
-                                <model:ItemEntry Name="Iron Ore" />
+                                <model:ItemEntry Name="Iron Ore" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/8/87/Iron_Ore.png/revision/latest/scale-to-width-down/16?cb=20200516214315" />
                             </model:QuantifiedItemEntry.Item>
                         </model:QuantifiedItemEntry>
                     </data:QuantifiedItemEntryObservableCollection>
                 </model:RecipeEntry.Ingredients>
                 <model:RecipeEntry.CraftingStations>
                     <data:ItemEntryObservableCollection>
-                        <model:ItemEntry Name="Placed Bottle" />
-                        <model:ItemEntry Name="Alchemy Table" />
+                        <model:ItemEntry Name="Placed Bottle" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/4/40/Bottle_%28crafting_station%29.png/revision/latest/scale-to-width-down/32?cb=20160806030305" />
+                        <model:ItemEntry Name="Alchemy Table" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/4/43/Alchemy_Table.png/revision/latest/scale-to-width-down/32?cb=20200516183459" />
                     </data:ItemEntryObservableCollection>
                 </model:RecipeEntry.CraftingStations>
             </model:RecipeEntry>
@@ -253,7 +260,7 @@
                 <model:RecipeEntry.ResultingItem>
                     <model:QuantifiedItemEntry Quantity="1">
                         <model:QuantifiedItemEntry.Item>
-                            <model:ItemEntry Name="Megashark" />
+                            <model:ItemEntry Name="Megashark" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/3/36/Megashark.png/revision/latest/scale-to-width-down/70?cb=20200516215241" />
                         </model:QuantifiedItemEntry.Item>
                     </model:QuantifiedItemEntry>
                 </model:RecipeEntry.ResultingItem>
@@ -261,30 +268,30 @@
                     <data:QuantifiedItemEntryObservableCollection>
                         <model:QuantifiedItemEntry Quantity="1">
                             <model:QuantifiedItemEntry.Item>
-                                <model:ItemEntry Name="Minishark" />
+                                <model:ItemEntry Name="Minishark" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/9/96/Minishark.png/revision/latest/scale-to-width-down/54?cb=20200805024933" />
                             </model:QuantifiedItemEntry.Item>
                         </model:QuantifiedItemEntry>
                         <model:QuantifiedItemEntry Quantity="1">
                             <model:QuantifiedItemEntry.Item>
-                                <model:ItemEntry Name="Illegal Gun Parts" />
+                                <model:ItemEntry Name="Illegal Gun Parts" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/c/cf/Illegal_Gun_Parts.png/revision/latest/scale-to-width-down/30?cb=20200516214224" />
                             </model:QuantifiedItemEntry.Item>
                         </model:QuantifiedItemEntry>
                         <model:QuantifiedItemEntry Quantity="5">
                             <model:QuantifiedItemEntry.Item>
-                                <model:ItemEntry Name="Shark Fin" />
+                                <model:ItemEntry Name="Shark Fin" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/9/9b/Shark_Fin.png/revision/latest/scale-to-width-down/22?cb=20200519215341" />
                             </model:QuantifiedItemEntry.Item>
                         </model:QuantifiedItemEntry>
                         <model:QuantifiedItemEntry Quantity="20">
                             <model:QuantifiedItemEntry.Item>
-                                <model:ItemEntry Name="Soul of Might" />
+                                <model:ItemEntry Name="Soul of Might" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/3/39/Soul_of_Might.png/revision/latest/scale-to-width-down/22?cb=20200517010620" />
                             </model:QuantifiedItemEntry.Item>
                         </model:QuantifiedItemEntry>
                     </data:QuantifiedItemEntryObservableCollection>
                 </model:RecipeEntry.Ingredients>
                 <model:RecipeEntry.CraftingStations>
                     <data:ItemEntryObservableCollection>
-                        <model:ItemEntry Name="Mythril Anvil" />
-                        <model:ItemEntry Name="Orichalcum Anvil" />
+                        <model:ItemEntry Name="Mythril Anvil" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/3/3d/Mythril_Anvil.png/revision/latest/scale-to-width-down/30?cb=20200516215710" />
+                        <model:ItemEntry Name="Orichalcum Anvil" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/d/dc/Orichalcum_Anvil.png/revision/latest/scale-to-width-down/30?cb=20200516220030" />
                     </data:ItemEntryObservableCollection>
                 </model:RecipeEntry.CraftingStations>
             </model:RecipeEntry>
@@ -292,7 +299,7 @@
                 <model:RecipeEntry.ResultingItem>
                     <model:QuantifiedItemEntry Quantity="1">
                         <model:QuantifiedItemEntry.Item>
-                            <model:ItemEntry Name="Molten Charm" />
+                            <model:ItemEntry Name="Molten Charm" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/8/86/Molten_Charm.png/revision/latest/scale-to-width-down/30?cb=20200516215356" />
                         </model:QuantifiedItemEntry.Item>
                     </model:QuantifiedItemEntry>
                 </model:RecipeEntry.ResultingItem>
@@ -300,19 +307,19 @@
                     <data:QuantifiedItemEntryObservableCollection>
                         <model:QuantifiedItemEntry Quantity="1">
                             <model:QuantifiedItemEntry.Item>
-                                <model:ItemEntry Name="Lava Charm" />
+                                <model:ItemEntry Name="Lava Charm" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/9/9b/Lava_Charm.png/revision/latest/scale-to-width-down/30?cb=20200516214546" />
                             </model:QuantifiedItemEntry.Item>
                         </model:QuantifiedItemEntry>
                         <model:QuantifiedItemEntry Quantity="1">
                             <model:QuantifiedItemEntry.Item>
-                                <model:ItemEntry Name="Obsidian Skull" />
+                                <model:ItemEntry Name="Obsidian Skull" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/4/4e/Obsidian_Skull.png/revision/latest/scale-to-width-down/22?cb=20200516215927" />
                             </model:QuantifiedItemEntry.Item>
                         </model:QuantifiedItemEntry>
                     </data:QuantifiedItemEntryObservableCollection>
                 </model:RecipeEntry.Ingredients>
                 <model:RecipeEntry.CraftingStations>
                     <data:ItemEntryObservableCollection>
-                        <model:ItemEntry Name="Tinkerer's Workshop" />
+                        <model:ItemEntry Name="Tinkerer's Workshop" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/1/17/Tinkerer%27s_Workshop.png/revision/latest/scale-to-width-down/30?cb=20200516222945" />
                     </data:ItemEntryObservableCollection>
                 </model:RecipeEntry.CraftingStations>
             </model:RecipeEntry>
@@ -320,7 +327,7 @@
                 <model:RecipeEntry.ResultingItem>
                     <model:QuantifiedItemEntry Quantity="30">
                         <model:QuantifiedItemEntry.Item>
-                            <model:ItemEntry Name="Silk Rope" />
+                            <model:ItemEntry Name="Silk Rope" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/e/e1/Silk_Rope.png/revision/latest/scale-to-width-down/16?cb=20200516221756" />
                         </model:QuantifiedItemEntry.Item>
                     </model:QuantifiedItemEntry>
                 </model:RecipeEntry.ResultingItem>
@@ -328,14 +335,14 @@
                     <data:QuantifiedItemEntryObservableCollection>
                         <model:QuantifiedItemEntry Quantity="1">
                             <model:QuantifiedItemEntry.Item>
-                                <model:ItemEntry Name="Silk" />
+                                <model:ItemEntry Name="Silk" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/8/83/Silk.png/revision/latest/scale-to-width-down/26?cb=20200820022839" />
                             </model:QuantifiedItemEntry.Item>
                         </model:QuantifiedItemEntry>
                     </data:QuantifiedItemEntryObservableCollection>
                 </model:RecipeEntry.Ingredients>
                 <model:RecipeEntry.CraftingStations>
                     <data:ItemEntryObservableCollection>
-                        <model:ItemEntry Name="Loom" />
+                        <model:ItemEntry Name="Loom" ImageUrl="https://static.wikia.nocookie.net/terraria_gamepedia/images/8/83/Silk.png/revision/latest/scale-to-width-down/26?cb=20200820022839" />
                     </data:ItemEntryObservableCollection>
                 </model:RecipeEntry.CraftingStations>
             </model:RecipeEntry>
