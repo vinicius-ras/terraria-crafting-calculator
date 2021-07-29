@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Web;
 using TerrariaCraftingCalculator.Extensions;
 using TerrariaCraftingCalculator.Models;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,8 +27,12 @@ namespace TerrariaCraftingCalculator
     public sealed partial class MainPage : Page
     {
         // CONSTANTS
+        /// <summary>The minimum quantity a user can define for a recipe, in the list of recipes to craft.</summary>
+        private const int MinimumRecipeQuantity = 1;
         /// <summary>The amount of time to wait before sending an HTTP request to search for items via the Terraria Fandom API.</summary>
-        private readonly TimeSpan TimeToWaitBeforeHttpRequest = TimeSpan.FromMilliseconds(500);
+        private static readonly TimeSpan TimeToWaitBeforeHttpRequest = TimeSpan.FromMilliseconds(500);
+        /// <summary>Solid color brush containing the user system's "foreground error color".</summary>
+        private static readonly SolidColorBrush TextControlErrorForegroundColorBrush = new SolidColorBrush((Color)Application.Current.Resources["SystemErrorTextColor"]);
 
 
 
@@ -308,13 +313,51 @@ namespace TerrariaCraftingCalculator
         /// <param name="args">Event information.</param>
         private void RecipeQuantityChanged(object sender, TextChangedEventArgs args)
         {
-            // Try to parse the new value to see if it is a valid number
+            // Find the "decrease" button, and enable/disable it as necessary
             var textBox = (TextBox)sender;
-            if (int.TryParse(textBox.Text, out int typedNumber) || typedNumber < 1)
+
+            var closestPanel = VisualTreeHelperUtilities.FindClosestParentOfType<Panel>(textBox);
+            var removeSymbol = VisualTreeHelperUtilities.GetAllChildren(closestPanel)
+                .OfType<SymbolIcon>()
+                .Where(symbolIcon => symbolIcon.Symbol == Symbol.Remove)
+                .Single();
+            var decreaseQuantityButton = VisualTreeHelperUtilities.FindClosestParentOfType<Button>(removeSymbol);
+
+            // Try to parse the new value to see if it is a valid number
+            bool canParseNumber = int.TryParse(textBox.Text, out int typedNumber);
+            if (canParseNumber == false || typedNumber < MinimumRecipeQuantity)
             {
-                // TODO: display some kind of tooltip and/or indication that the typed number is invalid
+                decreaseQuantityButton.IsEnabled = false;
+
+                // Do not accept anything but numbers
+                string newText = Regex.Replace(textBox.Text, @"\D", "");
+                if (string.IsNullOrWhiteSpace(newText))
+                    newText = MinimumRecipeQuantity.ToString();
+                else
+                {
+                    typedNumber = int.Parse(newText);
+                    if (typedNumber < MinimumRecipeQuantity)
+                        newText = MinimumRecipeQuantity.ToString();
+                }
+                textBox.Text = newText;
+                return;
             }
+            else
+                decreaseQuantityButton.IsEnabled = (typedNumber > MinimumRecipeQuantity);
             RefreshTotalIngredientsList();
+        }
+
+
+        /// <summary>Called to update the quantity of a given recipe.</summary>
+        /// <remarks>This method also enables/disables the button which decreases the quantity of items to craft, according to the new amount.</remarks>
+        /// <param name="quantityTextBox">The <see cref="TextBox"/> component where the current quantity is located.</param>
+        /// <param name="increaseBy">The amount to add/subtract from the current quantity.</param>
+        private static void UpdateRecipeQuantity(TextBox quantityTextBox, int increaseBy)
+        {
+            // Increase the quantity
+            if (int.TryParse(quantityTextBox.Text, out int currentQuantity) == false)
+                return;
+            quantityTextBox.Text = (currentQuantity + increaseBy).ToString();
         }
 
 
@@ -324,27 +367,12 @@ namespace TerrariaCraftingCalculator
         private void ButtonIncreaseItemQuantityInCraftingList(object sender, RoutedEventArgs e)
         {
             // Use the visual tree to find the "quantity" text box related to the item in the list
-            var increaseQuantityButton = (Button)sender;
-            var closestStackPanel = VisualTreeHelperUtilities.FindClosestParentOfType<StackPanel>(increaseQuantityButton);
-            var quantityTextBox = VisualTreeHelperUtilities.GetAllChildren(closestStackPanel)
+            var buttonRef = (Button)sender;
+            var closestPanel = VisualTreeHelperUtilities.FindClosestParentOfType<Panel>(buttonRef);
+            var quantityTextBox = VisualTreeHelperUtilities.GetAllChildren(closestPanel)
                 .OfType<TextBox>()
                 .Single();
-
-            // Increase the quantity
-            if (int.TryParse(quantityTextBox.Text, out int currentQuantity) == false)
-                return;
-            quantityTextBox.Text = (++currentQuantity).ToString();
-
-            // Enable the "decrease" button when necessary
-            if (currentQuantity > 1)
-            {
-                var removeSymbol = VisualTreeHelperUtilities.GetAllChildren(closestStackPanel)
-                    .OfType<SymbolIcon>()
-                    .Where(symbolIcon => symbolIcon.Symbol == Symbol.Remove)
-                    .Single();
-                var decreaseQuantityButton = VisualTreeHelperUtilities.FindClosestParentOfType<Button>(removeSymbol);
-                decreaseQuantityButton.IsEnabled = true;
-            }
+            UpdateRecipeQuantity(quantityTextBox, 1);
         }
 
 
@@ -355,19 +383,12 @@ namespace TerrariaCraftingCalculator
         {
             // Use the visual tree to find the "quantity" text box related to the item in the list
             var buttonRef = (Button)sender;
-            var closestStackPanel = VisualTreeHelperUtilities.FindClosestParentOfType<StackPanel>(buttonRef);
-            var quantityTextBox = VisualTreeHelperUtilities.GetAllChildren(closestStackPanel)
+            var closestPanel = VisualTreeHelperUtilities.FindClosestParentOfType<Panel>(buttonRef);
+            var quantityTextBox = VisualTreeHelperUtilities.GetAllChildren(closestPanel)
                 .OfType<TextBox>()
                 .Single();
 
-            // Increase the quantity
-            if (int.TryParse(quantityTextBox.Text, out int currentQuantity) == false)
-                return;
-            quantityTextBox.Text = (--currentQuantity).ToString();
-
-            // Disable the "decrease" button when necessary
-            if (currentQuantity <= 1)
-                buttonRef.IsEnabled = false;
+            UpdateRecipeQuantity(quantityTextBox, -1);
         }
 
 

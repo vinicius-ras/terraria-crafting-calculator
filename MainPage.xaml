@@ -19,7 +19,7 @@
         </Style>
     </Page.Resources>
 
-        <Grid Padding="20" ColumnSpacing="10">
+    <Grid Padding="20" ColumnSpacing="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -54,12 +54,12 @@
             Grid.ColumnSpan="2"
             ItemsSource="{Binding ElementName=AppMainPage, Path=RecipesList}"
             d:ItemsSource="{StaticResource itemsToCraftDesignData}"
-            Background="LightGray"
+            Background="{ThemeResource SystemChromeLowColor}"
             Padding="5"
             Margin="0,5,0,0"
             CornerRadius="5"
             BorderThickness="1"
-            BorderBrush="DimGray"
+            BorderBrush="{ThemeResource SystemChromeHighColor}"
             CanReorderItems="True"
             AllowDrop="True">
             <GridView.ItemContainerStyle>
@@ -75,91 +75,95 @@
             </GridView.ItemsPanel>
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="model:QuantifiedRecipeEntry">
-                    <Grid BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="White" Padding="15" RowSpacing="15" ColumnSpacing="10">
+                    <Grid BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Background="White" RowSpacing="15" ColumnSpacing="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                            <Image Style="{StaticResource itemImage}">
+                        <controls:DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" LastChildFill="False" Background="{ThemeResource SystemChromeHighColor}" Padding="5">
+                            <Image controls:DockPanel.Dock="Left" Style="{StaticResource itemImage}">
                                 <Image.Source>
                                     <BitmapImage UriSource="{Binding Recipe.ResultingItem.Item.ImageUrl}" />
                                 </Image.Source>
                             </Image>
-                            <TextBlock Text="{Binding Path=Recipe.ResultingItem.Item.Name}" VerticalAlignment="Center" />
-                        </StackPanel>
-
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Quantity to craft:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                            <TextBox Grid.Column="1" Text="{Binding Path=Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" TextAlignment="Center" Margin="5,0" TextChanged="RecipeQuantityChanged" VerticalAlignment="Center" />
-                            <Button HorizontalAlignment="Stretch" Click="ButtonDecreaseItemQuantityInCraftingList" IsEnabled="False">
-                                <Button.Content>
-                                    <SymbolIcon Symbol="Remove" />
-                                </Button.Content>
-                            </Button>
-                            <Button HorizontalAlignment="Stretch" Click="ButtonIncreaseItemQuantityInCraftingList">
-                                <Button.Content>
-                                    <SymbolIcon Symbol="Add" />
-                                </Button.Content>
-                            </Button>
-                            <Button HorizontalAlignment="Stretch" Click="ButtonRemoveItemFromCraftingList" Margin="10" Tag="{Binding}">
+                            <TextBlock controls:DockPanel.Dock="Left" Text="{Binding Path=Recipe.ResultingItem.Item.Name}" VerticalAlignment="Center" />
+                            <Button controls:DockPanel.Dock="Right" HorizontalAlignment="Stretch" Click="ButtonRemoveItemFromCraftingList" Margin="10" Tag="{Binding}" CornerRadius="1000">
                                 <Button.Content>
                                     <SymbolIcon Symbol="Delete" />
                                 </Button.Content>
                             </Button>
-                        </StackPanel>
+                        </controls:DockPanel>
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Ingredients:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                        <muxc:ItemsRepeater Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Recipe.Ingredients}">
-                            <muxc:ItemsRepeater.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <StackPanel.Resources>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="FontSize" Value="10" />
-                                                <Setter Property="VerticalAlignment" Value="Center" />
-                                            </Style>
-                                        </StackPanel.Resources>
-                                        <Image Style="{StaticResource itemImage}">
-                                            <Image.Source>
-                                                <BitmapImage UriSource="{Binding Item.ImageUrl}" />
-                                            </Image.Source>
-                                        </Image>
-                                        <TextBlock Text="{Binding Quantity}" />
-                                        <TextBlock Text="x" Margin="0,0,5,0" />
-                                        <TextBlock Text="{Binding Item.Name}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </muxc:ItemsRepeater.ItemTemplate>
-                        </muxc:ItemsRepeater>
+                        <Grid Grid.Row="1" Padding="15,5" RowSpacing="20" ColumnSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Quantity to craft:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                            <controls:DockPanel Grid.Row="0" Grid.Column="1" controls:DockPanel.Dock="Top">
+                                <TextBox Grid.Column="1" Text="{Binding Path=Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" TextAlignment="Center" Margin="5,0" TextChanged="RecipeQuantityChanged" VerticalAlignment="Center" />
+                                <Button HorizontalAlignment="Stretch" Click="ButtonDecreaseItemQuantityInCraftingList" IsEnabled="False">
+                                    <Button.Content>
+                                        <SymbolIcon Symbol="Remove" />
+                                    </Button.Content>
+                                </Button>
+                                <Button HorizontalAlignment="Stretch" Click="ButtonIncreaseItemQuantityInCraftingList">
+                                    <Button.Content>
+                                        <SymbolIcon Symbol="Add" />
+                                    </Button.Content>
+                                </Button>
+                            </controls:DockPanel>
 
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Crafting stations:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                        <muxc:ItemsRepeater Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Recipe.CraftingStations}">
-                            <muxc:ItemsRepeater.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <StackPanel.Resources>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="FontSize" Value="10" />
-                                            </Style>
-                                        </StackPanel.Resources>
-                                        <Image Style="{StaticResource itemImage}">
-                                            <Image.Source>
-                                                <BitmapImage UriSource="{Binding ImageUrl}" />
-                                            </Image.Source>
-                                        </Image>
-                                        <TextBlock Text="{Binding Name}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </muxc:ItemsRepeater.ItemTemplate>
-                        </muxc:ItemsRepeater>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Ingredients:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                            <muxc:ItemsRepeater Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Recipe.Ingredients}">
+                                <muxc:ItemsRepeater.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                            <StackPanel.Resources>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="FontSize" Value="10" />
+                                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                                </Style>
+                                            </StackPanel.Resources>
+                                            <Image Style="{StaticResource itemImage}">
+                                                <Image.Source>
+                                                    <BitmapImage UriSource="{Binding Item.ImageUrl}" />
+                                                </Image.Source>
+                                            </Image>
+                                            <TextBlock Text="{Binding Quantity}" />
+                                            <TextBlock Text="x" Margin="0,0,5,0" />
+                                            <TextBlock Text="{Binding Item.Name}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </muxc:ItemsRepeater.ItemTemplate>
+                            </muxc:ItemsRepeater>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Crafting stations:" FontSize="10" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                            <muxc:ItemsRepeater Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Recipe.CraftingStations}">
+                                <muxc:ItemsRepeater.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel.Resources>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="FontSize" Value="10" />
+                                                </Style>
+                                            </StackPanel.Resources>
+                                            <Image Style="{StaticResource itemImage}">
+                                                <Image.Source>
+                                                    <BitmapImage UriSource="{Binding ImageUrl}" />
+                                                </Image.Source>
+                                            </Image>
+                                            <TextBlock Text="{Binding Name}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </muxc:ItemsRepeater.ItemTemplate>
+                            </muxc:ItemsRepeater>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </GridView.ItemTemplate>
@@ -179,11 +183,11 @@
                 ItemsSource="{Binding ElementName=AppMainPage, Path=TotalIngredientsList}"
                 d:ItemsSource="{StaticResource totalIngredientsDesignData}"
                 Padding="5"
-                Background="LightGray"
+                Background="{ThemeResource SystemChromeLowColor}"
                 CornerRadius="5"
                 Margin="0,5,0,0"
                 BorderThickness="1"
-                BorderBrush="DimGray"
+                BorderBrush="{ThemeResource SystemChromeHighColor}"
                 CanReorderItems="true"
                 AllowDrop="True"
                 IsItemClickEnabled="False">
