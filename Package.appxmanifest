@@ -15,7 +15,7 @@
 
   <Properties>
     <DisplayName>terraria-crafting-calculator</DisplayName>
-    <PublisherDisplayName>vinic</PublisherDisplayName>
+    <PublisherDisplayName>Vinicius Rogério Araujo Silva</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -32,10 +32,10 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="TerrariaCraftingCalculator.App">
       <uap:VisualElements
-        DisplayName="terraria-crafting-calculator"
+        DisplayName="Terraria Crafting Calculator by Vinicius.RAS"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="terraria-crafting-calculator"
+        Description="A calculator for crafting Terarria recipes."
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
