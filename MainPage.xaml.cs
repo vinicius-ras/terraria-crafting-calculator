@@ -150,7 +150,7 @@ namespace TerrariaCraftingCalculator
                 {
                     var parser = new HtmlParser();
                     var parsedPage = await parser.ParseDocumentAsync(responseStream);
-                    var recipeRows = parsedPage.QuerySelectorAll("div.crafts tr[data-rowid]");
+                    var recipeRows = parsedPage.QuerySelectorAll(".crafts tr[data-rowid]");
                     var foundRows = recipeRows.Select(r => r.OuterHtml).ToList();
                     IElement lastResultTd = null,
                         lastIngredientsTd = null,
